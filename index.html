@@ -1,20 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZapClone</title>
+    <title>BatataZap 🥔</title>
     <style>
         * {
             margin: 0;
             padding: 0;
-            box-box-sizing: border-box;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #d9dbd5;
-            background-image: linear-gradient(to bottom, #00a884 127px, #e1e1e1 127px);
+            background-color: #f4f2ee;
+            background-image: linear-gradient(to bottom, #da8f31 127px, #e9e5de 127px);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,15 +23,15 @@
         }
 
         .container {
-            background-color: #f0f2f5;
+            background-color: white;
             width: 400px;
             padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.15);
         }
 
         h2 {
-            color: #3b4a54;
+            color: #5c3a21;
             margin-bottom: 20px;
             text-align: center;
         }
@@ -42,30 +43,32 @@
         label {
             display: block;
             margin-bottom: 5px;
-            color: #667781;
+            color: #7f6855;
             font-size: 14px;
+            font-weight: 600;
         }
 
-        input {
+        input, select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #a1b0b8;
-            border-radius: 5px;
+            padding: 12px;
+            border: 2px solid #e1d6cd;
+            border-radius: 8px;
             outline: none;
             font-size: 16px;
+            transition: 0.2s;
         }
 
         input:focus {
-            border-color: #00a884;
+            border-color: #da8f31;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background-color: #00a884;
+            background-color: #da8f31;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -73,219 +76,498 @@
         }
 
         button:hover {
-            background-color: #008f72;
+            background-color: #be751c;
         }
 
         .switch-form {
             margin-top: 15px;
             text-align: center;
             font-size: 14px;
-            color: #667781;
+            color: #7f6855;
         }
 
         .switch-form a {
-            color: #00a884;
+            color: #da8f31;
             text-decoration: none;
             font-weight: bold;
         }
 
-        /* Tela de Chat Oculta por padrão */
         .hidden {
             display: none !important;
         }
 
-        #chat-screen {
-            width: 100%;
-            max-width: 1000px;
+        /* --- TELA PRINCIPAL DO BATATAZAP --- */
+        #app-screen {
+            width: 95vw;
+            max-width: 1200px;
             height: 90vh;
-            background-color: #efeae2;
+            background-color: #fdfbf7;
             display: flex;
-            flex-direction: column;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             overflow: hidden;
         }
 
-        .chat-header {
-            background-color: #f0f2f5;
-            padding: 15px 20px;
+        /* Lateral Esquerda (Contatos e Configurações) */
+        .sidebar {
+            width: 350px;
+            background-color: #ffffff;
+            border-right: 1px solid #e9e5de;
             display: flex;
-            align-items: center;
-            border-bottom: 1px solid #e1e1e1;
+            flex-direction: column;
         }
 
-        .chat-header h3 {
-            color: #111b21;
+        .sidebar-header {
+            background-color: #f5ece1;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e9e5de;
+        }
+
+        .sidebar-header h3 {
+            color: #5c3a21;
+        }
+
+        .config-btn {
+            background: none;
+            color: #da8f31;
+            padding: 5px 10px;
+            font-size: 14px;
+            width: auto;
+        }
+
+        .action-area {
+            padding: 15px;
+            background-color: #fff9f2;
+            border-bottom: 1px solid #e9e5de;
+        }
+
+        .action-area input {
+            padding: 8px;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .contact-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .contact-item {
+            padding: 15px;
+            border-bottom: 1px solid #f4f2ee;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .contact-item:hover {
+            background-color: #fff4e6;
+        }
+
+        .contact-item.active {
+            background-color: #ffe8cc;
+        }
+
+        .contact-item .name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .contact-item .details {
+            font-size: 12px;
+            color: #7f6855;
+        }
+
+        /* Área do Chat (Direita) */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #fcf8f2;
+        }
+
+        .chat-blank {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #a39284;
+            font-size: 18px;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background-color: #f5ece1;
+            padding: 17px 20px;
+            border-bottom: 1px solid #e9e5de;
+            color: #5c3a21;
         }
 
         .chat-messages {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-color: #f4ecd8;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .message {
-            background-color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+        .msg {
+            padding: 10px 14px;
+            border-radius: 12px;
             max-width: 60%;
             width: fit-content;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            word-wrap: break-word;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        .chat-input-area {
-            background-color: #f0f2f5;
-            padding: 10px 20px;
+        .msg.sent {
+            background-color: #fcdfa2;
+            margin-left: auto;
+            color: #4a3111;
+        }
+
+        .msg.received {
+            background-color: white;
+            margin-right: auto;
+            color: #333;
+        }
+
+        .file-link {
+            display: block;
+            color: #be751c;
+            font-weight: bold;
+            margin-top: 5px;
+            text-decoration: underline;
+        }
+
+        .chat-input-bar {
+            background-color: #f5ece1;
+            padding: 15px;
             display: flex;
             gap: 10px;
             align-items: center;
         }
 
-        #message-input {
+        .chat-input-bar input[type="text"] {
             flex: 1;
+        }
+
+        .file-label {
+            background-color: #7f6855;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .btn-send {
+            width: auto;
+            padding: 12px 25px;
         }
     </style>
 </head>
 <body>
 
+    <!-- 1. TELA DE CADASTRO -->
     <div id="register-screen" class="container">
-        <h2>Criar Conta (WhatsApp)</h2>
-        <div class="form-group">
-            <label>Nome</label>
-            <input type="text" id="reg-name" placeholder="Seu nome">
-        </div>
-        <div class="form-group">
-            <label>Gmail</label>
-            <input type="email" id="reg-email" placeholder="seuemail@gmail.com">
-        </div>
-        <div class="form-group">
-            <label>Senha</label>
-            <input type="password" id="reg-password" placeholder="Sua senha">
-        </div>
-        <div class="form-group">
-            <label>Número de Telefone</label>
-            <input type="tel" id="reg-phone" placeholder="(11) 99999-9999">
-        </div>
+        <h2>🥔 BatataZap - Criar Conta</h2>
+        <div class="form-group"><label>Nome</label><input type="text" id="reg-name" placeholder="Seu nome"></div>
+        <div class="form-group"><label>Gmail</label><input type="email" id="reg-email" placeholder="nome@gmail.com"></div>
+        <div class="form-group"><label>Senha</label><input type="password" id="reg-password" placeholder="Sua senha"></div>
+        <div class="form-group"><label>Número de Telefone</label><input type="tel" id="reg-phone" placeholder="Ex: 11999999999"></div>
         <button onclick="cadastrar()">Cadastrar e Entrar</button>
-        <div class="switch-form">
-            Já tenho uma conta? <a href="#" onclick="alternarTela('login')">Fazer Login</a>
-        </div>
+        <div class="switch-form">Já tem conta? <a href="#" onclick="alternarTela('login')">Entrar</a></div>
     </div>
 
+    <!-- 2. TELA DE LOGIN -->
     <div id="login-screen" class="container hidden">
-        <h2>Entrar no WhatsApp</h2>
-        <div class="form-group">
-            <label>Gmail</label>
-            <input type="email" id="login-email" placeholder="seuemail@gmail.com">
-        </div>
-        <div class="form-group">
-            <label>Senha</label>
-            <input type="password" id="login-password" placeholder="Sua senha">
-        </div>
+        <h2>🥔 BatataZap - Login</h2>
+        <div class="form-group"><label>Gmail</label><input type="email" id="login-email" placeholder="nome@gmail.com"></div>
+        <div class="form-group"><label>Senha</label><input type="password" id="login-password" placeholder="Sua senha"></div>
         <button onclick="login()">Entrar</button>
-        <div class="switch-form">
-            Não tem conta? <a href="#" onclick="alternarTela('register')">Cadastre-se</a>
-        </div>
+        <div class="switch-form">Não tem conta? <a href="#" onclick="alternarTela('register')">Cadastre-se</a></div>
     </div>
 
-    <div id="chat-screen" class="hidden">
-        <div class="chat-header">
-            <h3 id="user-display-name">Nome do Usuário</h3>
-        </div>
-        <div class="chat-messages" id="chat-box">
-            <div class="message" style="background-color: #d9fdd3; margin-left: auto;">
-                Bem-vindo ao clone do WhatsApp! Sistema simulado com sucesso.
+    <!-- 3. TELA PRINCIPAL APP -->
+    <div id="app-screen" class="hidden">
+        <!-- Barra Lateral Esquerda -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3 id="my-profile-name">Meu Perfil</h3>
+                <button class="config-btn" onclick="abrirConfiguracoes()">⚙️ Configs</button>
+            </div>
+
+            <!-- Adicionar Contatos -->
+            <div class="action-area">
+                <label>Adicionar pelo Número:</label>
+                <input type="tel" id="search-phone" placeholder="Digite o número do amigo...">
+                <button onclick="adicionarContato()">Adicionar Batata-Amigo</button>
+            </div>
+
+            <!-- Lista de Contatos adicionados -->
+            <div class="contact-list" id="contacts-container">
+                <!-- Inserido via JS -->
             </div>
         </div>
-        <div class="chat-input-area">
-            <input type="text" id="message-input" placeholder="Digite uma mensagem...">
-            <button style="width: auto; padding: 10px 20px;" onclick="enviarMensagem()">Enviar</button>
+
+        <!-- Área de Conversa Direita -->
+        <div class="chat-area">
+            <div id="chat-blank-state" class="chat-blank">
+                <span style="font-size: 50px;">🥔</span>
+                <p>Selecione uma batata para começar a conversar!</p>
+            </div>
+
+            <div id="chat-active-state" class="chat-area hidden">
+                <div class="chat-header">
+                    <h3 id="chat-with-name">Nome do Amigo</h3>
+                    <span id="chat-with-details" style="font-size:12px; color: #7f6855;"></span>
+                </div>
+                
+                <div class="chat-messages" id="messages-container">
+                    <!-- Mensagens aparecem aqui -->
+                </div>
+
+                <div class="chat-input-bar">
+                    <!-- Envio de Arquivos -->
+                    <label class="file-label" title="Enviar arquivo">
+                        📁
+                        <input type="file" id="file-input" style="display: none;" onchange="enviarArquivo(this)">
+                    </label>
+                    <input type="text" id="message-text-input" placeholder="Digite sua batata-mensagem...">
+                    <button class="btn-send" onclick="enviarMensagemTexto()">Enviar</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Banco de dados simulado na memória do navegador
-        let usuarioSalvo = null;
+        // Funções para gerenciar o "Banco de Dados" no LocalStorage
+        function obterUsuariosBD() {
+            return JSON.parse(localStorage.getItem('bz_usuarios')) || {};
+        }
+        function salvarUsuariosBD(db) {
+            localStorage.setItem('bz_usuarios', JSON.stringify(db));
+        }
+        function obterMensagensBD() {
+            return JSON.parse(localStorage.getItem('bz_mensagens')) || [];
+        }
+        function salvarMensagensBD(msgs) {
+            localStorage.setItem('bz_mensagens', JSON.stringify(msgs));
+        }
+
+        let usuarioLogado = null;
+        let contatoAtivoNum = null;
 
         function alternarTela(tela) {
-            if (tela === 'login') {
-                document.getElementById('register-screen').classList.add('hidden');
-                document.getElementById('login-screen').classList.remove('hidden');
-            } else {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('register-screen').classList.remove('hidden');
-            }
+            document.getElementById('register-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.add('hidden');
+            if (tela === 'login') document.getElementById('login-screen').classList.remove('hidden');
+            else document.getElementById('register-screen').classList.remove('hidden');
         }
 
         function cadastrar() {
-            const nome = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
+            const nome = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
             const senha = document.getElementById('reg-password').value;
-            const fone = document.getElementById('reg-phone').value;
+            const fone = document.getElementById('reg-phone').value.trim();
 
-            if(!nome || !email || !senha || !fone) {
-                alert("Por favor, preencha todos os campos!");
-                return;
-            }
+            if(!nome || !email || !senha || !fone) return alert("Preencha tudo!");
 
-            // Salva os dados na memória temporária
-            usuarioSalvo = { nome, email, senha, fone };
-            
-            alert("Conta criada com sucesso!");
-            entrarNoChat(nome);
+            let db = obterUsuariosBD();
+            if(db[fone]) return alert("Este número já está cadastrado!");
+
+            // Cadastra no banco simulado
+            db[fone] = { nome, email, senha, fone, contatos: [] };
+            salvarUsuariosBD(db);
+
+            alert("Conta Batata criada!");
+            fazerLoginEfetivo(db[fone]);
         }
 
         function login() {
-            const email = document.getElementById('login-email').value;
+            const email = document.getElementById('login-email').value.trim();
             const senha = document.getElementById('login-password').value;
 
-            if (!usuarioSalvo) {
-                alert("Nenhuma conta encontrada! Cadastre-se primeiro.");
-                return;
+            let db = obterUsuariosBD();
+            let encontrado = null;
+
+            for(let fone in db) {
+                if(db[fone].email === email && db[fone].senha === senha) {
+                    encontrado = db[fone];
+                    break;
+                }
             }
 
-            if (email === usuarioSalvo.email && senha === usuarioSalvo.senha) {
-                entrarNoChat(usuarioSalvo.nome);
-            } else {
-                alert("Gmail ou Senha incorretos!");
-            }
+            if(encontrado) fazerLoginEfetivo(encontrado);
+            else alert("Gmail ou Senha incorretos!");
         }
 
-        function entrarNoChat(nomeUsuario) {
-            // Esconde as telas de login/cadastro e mostra o chat
+        function fazerLoginEfetivo(usuario) {
+            usuarioLogado = usuario;
             document.getElementById('register-screen').classList.add('hidden');
             document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('chat-screen').classList.remove('hidden');
-            
-            // Muda o fundo do body para combinar com o chat expandido
+            document.getElementById('app-screen').classList.remove('hidden');
             document.body.style.backgroundImage = "none";
-            document.body.style.backgroundColor = "#eae6df";
 
-            // Mostra o nome do usuário no topo
-            document.getElementById('user-display-name').innerText = nomeUsuario;
+            document.getElementById('my-profile-name').innerText = `🥔 ${usuarioLogado.name || usuarioLogado.nome}`;
+            atualizarListaContatos();
+            
+            // Loop para atualizar mensagens em tempo real se abrir duas abas
+            setInterval(renderizarMensagens, 2000);
         }
 
-        function enviarMensagem() {
-            const input = document.getElementById('message-input');
-            const texto = input.value.trim();
-            if(texto === "") return;
+        function abrirConfiguracoes() {
+            alert(`Configurações do Seu Perfil:\n\nNome: ${usuarioLogado.nome}\nEmail: ${usuarioLogado.email}\nNúmero: ${usuarioLogado.fone}`);
+        }
 
-            const chatBox = document.getElementById('chat-box');
+        function adicionarContato() {
+            const numAlvo = document.getElementById('search-phone').value.trim();
+            if(!numAlvo) return;
+            if(numAlvo === usuarioLogado.fone) return alert("Você não pode adicionar você mesmo!");
+
+            let db = obterUsuariosBD();
+            let amigo = db[numAlvo];
+
+            if(!amigo) {
+                return alert("Nenhuma batata encontrada com esse número!");
+            }
+
+            // Pega os contatos atuais do usuário logado
+            if(!usuarioLogado.contatos) usuarioLogado.contatos = [];
             
-            // Cria a bolha da mensagem
-            const novaMensagem = document.createElement('div');
-            novaMensagem.classList.add('message');
-            novaMensagem.style.marginLeft = "auto";
-            novaMensagem.style.backgroundColor = "#d9fdd3";
-            novaMensagem.innerText = texto;
+            if(usuarioLogado.contatos.includes(numAlvo)) {
+                return alert("Esse contato já está na sua lista!");
+            }
 
-            chatBox.appendChild(novaMensagem);
-            input.value = ""; // Limpa o campo
-            chatBox.scrollTop = chatBox.scrollHeight; // Rola para baixo
+            usuarioLogado.contatos.push(numAlvo);
+            db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
+            salvarUsuariosBD(db);
+
+            document.getElementById('search-phone').value = "";
+            alert(`Sucesso! ${amigo.nome} adicionado.`);
+            atualizarListaContatos();
+        }
+
+        function atualizarListaContatos() {
+            const container = document.getElementById('contacts-container');
+            container.innerHTML = "";
+            
+            let db = obterUsuariosBD();
+            let meusContatos = usuarioLogado.contatos || [];
+
+            meusContatos.forEach(foneNum => {
+                let dadosAmigo = db[foneNum];
+                if(!dadosAmigo) return;
+
+                let item = document.createElement('div');
+                item.className = `contact-item ${contatoAtivoNum === foneNum ? 'active' : ''}`;
+                item.onclick = () => abrirConversa(foneNum);
+                item.innerHTML = `
+                    <div class="name">🥔 ${dadosAmigo.nome}</div>
+                    <div class="details">${dadosAmigo.email} | ${dadosAmigo.fone}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function abrirConversa(foneNum) {
+            contatoAtivoNum = foneNum;
+            let db = obterUsuariosBD();
+            let amigo = db[foneNum];
+
+            document.getElementById('chat-blank-state').classList.add('hidden');
+            document.getElementById('chat-active-state').classList.remove('hidden');
+            
+            document.getElementById('chat-with-name').innerText = amigo.nome;
+            document.getElementById('chat-with-details').innerText = `${amigo.email} • Tel: ${amigo.fone}`;
+            
+            atualizarListaContatos();
+            renderizarMensagens();
+        }
+
+        function renderizarMensagens() {
+            if(!contatoAtivoNum) return;
+
+            const container = document.getElementById('messages-container');
+            // Guarda posição do scroll para não ficar pulando
+            const de FatoNoFim = container.scrollHeight - container.scrollTop <= container.clientHeight + 40;
+
+            container.innerHTML = "";
+            let todasMsgs = obterMensagensBD();
+
+            // Filtra mensagens entre eu e o contato ativo
+            let msgsFiltradas = todasMsgs.filter(m => 
+                (m.de === usuarioLogado.fone && m.para === contatoAtivoNum) ||
+                (m.de === contatoAtivoNum && m.para === usuarioLogado.fone)
+            );
+
+            msgsFiltradas.forEach(m => {
+                let div = document.createElement('div');
+                div.className = `msg ${m.de === usuarioLogado.fone ? 'sent' : 'received'}`;
+                
+                if(m.tipo === 'texto') {
+                    div.innerText = m.conteudo;
+                } else if(m.tipo === 'arquivo') {
+                    div.innerHTML = `📁 <strong>Arquivo enviado:</strong> <br> <a class="file-link" href="${m.conteudo}" download="${m.nomeArquivo}">${m.nomeArquivo}</a>`;
+                }
+
+                container.appendChild(div);
+            });
+
+            if(de FatoNoFim) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        function enviarMensagemTexto() {
+            const input = document.getElementById('message-text-input');
+            const texto = input.value.trim();
+            if(!texto || !contatoAtivoNum) return;
+
+            let todasMsgs = obterMensagensBD();
+            todasMsgs.push({
+                de: usuarioLogado.fone,
+                para: contatoAtivoNum,
+                tipo: 'texto',
+                conteudo: texto,
+                timestamp: Date.now()
+            });
+
+            salvarMensagensBD(todasMsgs);
+            input.value = "";
+            renderizarMensagens();
+        }
+
+        // Sistema para enviar arquivos transformando em Base64 (salva direto no navegador)
+        function enviarArquivo(inputElement) {
+            const arquivo = inputElement.files[0];
+            if(!arquivo || !contatoAtivoNum) return;
+
+            const leitor = new FileReader();
+            leitor.onload = function(e) {
+                const urlBase64 = e.target.result; // O arquivo vira uma string de dados
+
+                let todasMsgs = obterMensagensBD();
+                todasMsgs.push({
+                    de: usuarioLogado.fone,
+                    para: contatoAtivoNum,
+                    tipo: 'arquivo',
+                    conteudo: urlBase64,
+                    nomeArquivo: arquivo.name,
+                    timestamp: Date.now()
+                });
+
+                salvarMensagensBD(todasMsgs);
+                renderizarMensagens();
+            };
+            leitor.readAsDataURL(arquivo);
+            inputElement.value = ""; // limpa o input de arquivo
         }
     </script>
 </body>
 </html>
-
