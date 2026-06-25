@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BatataZap 🥔🍟</title>
+    <title>BatataZap Supremo 🥔 Fries Edition</title>
     <style>
         * {
             margin: 0;
@@ -49,7 +49,7 @@
             font-weight: 600;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e1d6cd;
@@ -59,7 +59,7 @@
             transition: 0.2s;
         }
 
-        input:focus {
+        input:focus, select:focus {
             border-color: #da8f31;
         }
 
@@ -163,13 +163,49 @@
             background-color: #f5ece1;
             padding: 15px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
             border-bottom: 1px solid #e9e5de;
         }
 
-        .sidebar-header h3 {
-            color: #5c3a21;
+        .profile-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* --- DESIGN DOS STATUS MODO BATATA --- */
+        .status-badge {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        .status-frita { background-color: #ffcc00; animation: pulseGlow 1.5s infinite; }
+        .status-pure { background-color: #87ceeb; }
+        .status-assada { background-color: #ff5722; }
+        .status-podre { background-color: #4caf50; }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(255, 204, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); }
+        }
+
+        .economy-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff3cd;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #ffeeba;
+            font-size: 13px;
+            font-weight: bold;
+            color: #856404;
         }
 
         .action-area {
@@ -194,6 +230,9 @@
             border-bottom: 1px solid #f4f2ee;
             cursor: pointer;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .contact-item:hover {
@@ -248,6 +287,7 @@
             width: fit-content;
             word-wrap: break-word;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .msg .sender-phone {
@@ -272,6 +312,27 @@
             background-color: white;
             margin-right: auto;
             color: #333;
+        }
+
+        .msg.hot-potato-style {
+            background-color: #ff4d4d !important;
+            color: white !important;
+            animation: shake 0.3s infinite;
+        }
+        .msg.hot-potato-style .sender-phone { color: #fff !important; }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
         .file-link {
@@ -312,13 +373,76 @@
             width: auto;
             margin-bottom: 0;
         }
-        .btn-salvar-contato:hover {
-            background-color: #e6b800;
+
+        .btn-toggle-potato {
+            background-color: #7f6855;
+            padding: 12px;
+            font-size: 16px;
+            width: auto;
+            margin-bottom: 0;
+        }
+        .btn-toggle-potato.active {
+            background-color: #ff3300;
+            animation: pulseGlow 1s infinite;
         }
 
-        /* =======================================================
-           ESTRUTURA DA ANIMAÇÃO ÉPICA DE BATATA 🍟💥
-        ======================================================= */
+        /* --- LOJINHA POPUP --- */
+        .shop-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 10000;
+            width: 350px;
+        }
+        .shop-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+
+        /* --- TELA DE LIGAÇÃO TEATRAL --- */
+        .call-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(44, 26, 12, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            color: white;
+            text-align: center;
+        }
+        .call-avatar {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: ringAnimation 1s infinite alternate;
+        }
+        @keyframes ringAnimation {
+            0% { transform: scale(1) rotate(-10deg); }
+            100% { transform: scale(1.1) rotate(10deg); }
+        }
+        .btn-hangup {
+            background-color: #ff3300;
+            width: auto;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
+            margin-top: 40px;
+        }
+
+        /* --- ANIMAÇÃO DE LOADING --- */
         #loading-overlay {
             position: fixed;
             top: 0;
@@ -343,10 +467,8 @@
 
         .super-batata {
             font-size: 100px;
-            animation: zoomExplosivo 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate, girarGlow 4s linear infinite;
+            animation: zoomExplosivo 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate;
             filter: drop-shadow(0 0 30px #ffcc00);
-            position: relative;
-            z-index: 2;
         }
 
         .logo-text {
@@ -359,14 +481,11 @@
             background: linear-gradient(to bottom, #fff 30%, #ffcc00 60%, #ff3300 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 4px 10px rgba(255,51,0,0.8));
             margin-top: 20px;
             transform: scale(0);
-            animation: entradaTexto 0.8s 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.5);
-            z-index: 2;
+            animation: entradaTexto 0.8s 0.3s forwards;
         }
 
-        /* Partículas voando no fundo */
         .particle {
             position: absolute;
             font-size: 24px;
@@ -375,29 +494,13 @@
         }
 
         @keyframes zoomExplosivo {
-            0% { transform: scale(0.8); filter: drop-shadow(0 0 20px #ff9900); }
-            100% { transform: scale(1.15); filter: drop-shadow(0 0 50px #ffcc00); }
+            0% { transform: scale(0.8); }
+            100% { transform: scale(1.15); }
         }
-
-        @keyframes girarGlow {
-            0% { transform: rotate(0deg) scale(var(--scale, 1)); }
-            50% { transform: rotate(180deg) scale(var(--scale, 1.1)); }
-            100% { transform: rotate(360deg) scale(var(--scale, 1)); }
-        }
-
-        @keyframes entradaTexto {
-            to { transform: scale(1); }
-        }
-
+        @keyframes entradaTexto { to { transform: scale(1); } }
         @keyframes explodirParticula {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(0);
-                opacity: 0;
-            }
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(0); opacity: 0; }
         }
     </style>
 </head>
@@ -405,8 +508,31 @@
 
     <!-- OVERLAY DA ANIMAÇÃO SUPREMA -->
     <div id="loading-overlay">
-        <div class="super-batata" id="anim-logo">🍟</div>
+        <div class="super-batata">🍟</div>
         <div class="logo-text">BATATA ZAP</div>
+    </div>
+
+    <!-- TELA DE LIGAÇÃO TEATRAL -->
+    <div id="call-screen" class="call-overlay hidden">
+        <div class="call-avatar">🥔📞</div>
+        <h2 id="call-user-name" style="color: white; margin-bottom: 10px;">Batata Amiga</h2>
+        <p id="call-status-text" style="font-size: 18px; color: #ffcc00;">Discando linha de amido...</p>
+        <button class="btn-hangup" onclick="desligarChamada()">Desligar 🚫</button>
+    </div>
+
+    <!-- LOJINHA POPUP -->
+    <div id="shop-modal" class="shop-modal hidden">
+        <h3 style="color:#da8f31; margin-bottom:15px; text-align:center;">🏪 Fábrica da Batata</h3>
+        <p style="font-size:12px; text-align:center; margin-bottom:15px;">Gaste suas moedas ganhas conversando!</p>
+        <div class="shop-item">
+            <span>🎨 Tema Cheddar</span>
+            <button style="width:auto; padding:5px 10px; font-size:12px;" onclick="comprarItem(50)">50 🪙</button>
+        </div>
+        <div class="shop-item">
+            <span>🔥 Emojis Picantes</span>
+            <button style="width:auto; padding:5px 10px; font-size:12px;" onclick="comprarItem(100)">100 🪙</button>
+        </div>
+        <button style="background-color:#7f6855; margin-top:10px;" onclick="fecharLojinha()">Fechar Lojinha</button>
     </div>
 
     <!-- 1. TELA DE CADASTRO -->
@@ -465,8 +591,23 @@
     <div id="app-screen" class="hidden">
         <div class="sidebar">
             <div class="sidebar-header">
-                <h3 id="my-profile-name">Meu Perfil</h3>
-                <button style="width:auto; padding: 5px;" onclick="alert('Nome: '+usuarioLogado.nome+'\nTelefone: '+usuarioLogado.fone)">⚙️ Info</button>
+                <div class="profile-area">
+                    <h3 id="my-profile-name">Meu Perfil</h3>
+                    <div style="display:flex; gap:5px; align-items:center;">
+                        <select id="my-status-select" style="width:90px; padding:3px; font-size:11px;" onchange="alterarMeuStatus(this.value)">
+                            <option value="frita">🍟 Frita</option>
+                            <option value="pure">🥣 Purê</option>
+                            <option value="assada">🥔 Assada</option>
+                            <option value="podre">☠️ Podre</option>
+                        </select>
+                        <button style="width:auto; padding: 5px;" onclick="alert('Nome: '+usuarioLogado.nome+'\nTelefone: '+usuarioLogado.fone)">⚙️</button>
+                    </div>
+                </div>
+                <!-- Barra de Moedas -->
+                <div class="economy-bar">
+                    <span>Saldo: <span id="coin-count">0</span> 🪙</span>
+                    <button style="width:auto; background-color:#da8f31; font-size:11px; padding:3px 8px; margin:0;" onclick="abrirLojinha()">🏪 Lojinha</button>
+                </div>
             </div>
             <div class="action-area">
                 <label>Adicionar pelo Número:</label>
@@ -487,11 +628,15 @@
                         <h3 id="chat-with-name">Nome</h3>
                         <span id="chat-with-details" style="font-size:12px;"></span>
                     </div>
-                    <button id="btn-salvar-anonimo" class="btn-salvar-contato hidden" onclick="salvarContatoAnonimo()">💾 Salvar Batata</button>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <button style="width:auto; padding:6px 12px; background-color:#25d366; font-size:14px; margin:0;" onclick="iniciarLigacao()">📞 Chamar</button>
+                        <button id="btn-salvar-anonimo" class="btn-salvar-contato hidden" onclick="salvarContatoAnonimo()">💾 Salvar Batata</button>
+                    </div>
                 </div>
                 <div class="chat-messages" id="messages-container"></div>
                 <div class="chat-input-bar">
                     <label class="file-label">📁<input type="file" id="file-input" style="display: none;" onchange="enviarArquivo(this)"></label>
+                    <button id="btn-potato-mode" class="btn-toggle-potato" onclick="toggleModoBatataQuente()" title="Modo Batata Quente (Destrói em 5s)">⏱️</button>
                     <input type="text" id="message-text-input" placeholder="Digite uma mensagem...">
                     <button style="width:auto; padding:12px 20px;" onclick="enviarMensagemTexto()">Enviar</button>
                 </div>
@@ -520,24 +665,17 @@
         let codigoGerado = null;
         let telefoneRecuperacao = null;
         let totalMensagensAntigas = 0;
+        let modoBatataQuenteAtivo = false;
+        let audioContext = null;
+        let ringInterval = null;
 
-        // DISPARADOR DA ANIMAÇÃO ÉPICA DE LOADING
         function dispararAnimacaoEntrada(callbackSucesso) {
             const overlay = document.getElementById('loading-overlay');
             overlay.classList.add('active');
-            
-            // Cria efeito de explosão de batatas flutuantes
-            for (let i = 0; i < 40; i++) {
-                criarParticulaBatata();
-            }
-
-            // Aguarda 3 segundos de show visual e libera o app
+            for (let i = 0; i < 40; i++) { criarParticulaBatata(); }
             setTimeout(() => {
                 overlay.classList.remove('active');
-                // Remove as partículas geradas do HTML após sumir
-                setTimeout(() => {
-                    document.querySelectorAll('.particle').forEach(el => el.remove());
-                }, 500);
+                setTimeout(() => { document.querySelectorAll('.particle').forEach(el => el.remove()); }, 500);
                 callbackSucesso();
             }, 3000);
         }
@@ -546,23 +684,14 @@
             const overlay = document.getElementById('loading-overlay');
             const p = document.createElement('div');
             p.className = 'particle';
-            
             const emojis = ['🍟', '🥔', '💥', '✨'];
             p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            
-            // Direções aleatórias calculadas dinamicamente
             const x = (Math.random() - 0.5) * window.innerWidth * 0.8;
             const y = (Math.random() - 0.5) * window.innerHeight * 0.8;
-            const r = Math.random() * 360 + 180;
-            
             p.style.setProperty('--x', `${x}px`);
             p.style.setProperty('--y', `${y}px`);
-            p.style.setProperty('--r', `${r}deg`);
-            
-            // Ponto central de explosão
-            p.style.left = '50%';
-            p.style.top = '50%';
-            
+            p.style.setProperty('--r', `${Math.random() * 360}deg`);
+            p.style.left = '50%'; p.style.top = '50%';
             overlay.appendChild(p);
         }
 
@@ -570,7 +699,6 @@
             document.getElementById('register-screen').classList.add('hidden');
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('forgot-screen').classList.add('hidden');
-            
             if (tela === 'login') document.getElementById('login-screen').classList.remove('hidden');
             if (tela === 'register') document.getElementById('register-screen').classList.remove('hidden');
             if (tela === 'forgot') {
@@ -588,16 +716,13 @@
             const fone = document.getElementById('reg-phone').value.trim();
 
             if(!nome || !email || !senha || !fone) return alert("Por favor, preencha todos os campos!");
-
             let db = obterUsuariosBD();
             if(db[fone]) return alert("Esse número já possui conta!");
 
-            db[fone] = { nome, email, senha, fone, contatos: [], nomesCustomizados: {} };
+            db[fone] = { nome, email, senha, fone, contatos: [], nomesCustomizados: {}, status: 'frita', coins: 0 };
             salvarUsuariosBD(db);
 
-            dispararAnimacaoEntrada(() => {
-                fazerLoginEfetivo(db[fone]);
-            });
+            dispararAnimacaoEntrada(() => { fazerLoginEfetivo(db[fone]); });
         }
 
         function login() {
@@ -606,62 +731,15 @@
             const senha = document.getElementById('login-password').value;
 
             if(!email || !fone || !senha) return alert("Preencha todos os campos!");
-
             let db = obterUsuariosBD();
             let conta = db[fone];
 
             if(conta && conta.email === email && conta.senha === senha) {
-                if(!conta.nomesCustomizados) conta.nomesCustomizados = {};
-                
-                dispararAnimacaoEntrada(() => {
-                    fazerLoginEfetivo(conta);
-                });
+                if(!conta.status) conta.status = 'frita';
+                if(!conta.coins) conta.coins = 0;
+                dispararAnimacaoEntrada(() => { fazerLoginEfetivo(conta); });
             } else {
-                alert("Dados incorretos! Verifique os dados digitados.");
-            }
-        }
-
-        function enviarCodigoVerificacao() {
-            const email = document.getElementById('forgot-email').value.trim();
-            const fone = document.getElementById('forgot-phone').value.trim();
-
-            let db = obterUsuariosBD();
-            let conta = db[fone];
-
-            if(conta && conta.email === email) {
-                telefoneRecuperacao = fone;
-                codigoGerado = Math.floor(1000 + Math.random() * 9000); 
-                
-                alert(`🍟 [CÓDIGO GERADO]\n\nSeu código de recuperação é: ${codigoGerado}`);
-                
-                document.getElementById('step-1').classList.add('hidden');
-                document.getElementById('step-2').classList.remove('hidden');
-            } else {
-                alert("Nenhuma conta encontrada com esses dados!");
-            }
-        }
-
-        function verificarCodigo() {
-            const codigoDigitado = document.getElementById('verification-code-input').value.trim();
-            if(codigoDigitado === String(codigoGerado)) {
-                alert("Código confirmado!");
-                document.getElementById('step-2').classList.add('hidden');
-                document.getElementById('step-3').classList.remove('hidden');
-            } else {
-                alert("Código incorreto!");
-            }
-        }
-
-        function atualizarSenha() {
-            const novaSenha = document.getElementById('new-password-input').value;
-            if(!novaSenha) return alert("Digite a nova senha!");
-
-            let db = obterUsuariosBD();
-            if(db[telefoneRecuperacao]) {
-                db[telefoneRecuperacao].senha = novaSenha;
-                salvarUsuariosBD(db);
-                alert("Senha alterada! Faça login.");
-                alternarTela('login');
+                alert("Dados incorretos!");
             }
         }
 
@@ -673,44 +751,93 @@
             document.body.style.backgroundImage = "none";
 
             document.getElementById('my-profile-name').innerText = "🥔 " + usuarioLogado.nome;
+            document.getElementById('my-status-select').value = usuarioLogado.status;
+            document.getElementById('coin-count').innerText = usuarioLogado.coins;
+
             atualizarListaContatos();
-            
             setInterval(renderizarMensagens, 1000);
             setInterval(atualizarListaContatosPeriodico, 2000); 
+            setInterval(processarCronometroBatatasQuentes, 1000); // Roda a limpeza a cada segundo
+        }
+
+        function alterarMeuStatus(novoStatus) {
+            usuarioLogado.status = novoStatus;
+            let db = obterUsuariosBD();
+            db[usuarioLogado.fone].status = novoStatus;
+            salvarUsuariosBD(db);
+            atualizarListaContatos();
+        }
+
+        function abrirLojinha() { document.getElementById('shop-modal').classList.remove('hidden'); }
+        function fecharLojinha() { document.getElementById('shop-modal').classList.add('hidden'); }
+        function comprarItem(preco) {
+            if(usuarioLogado.coins >= preco) {
+                usuarioLogado.coins -= preco;
+                document.getElementById('coin-count').innerText = usuarioLogado.coins;
+                let db = obterUsuariosBD();
+                db[usuarioLogado.fone].coins = usuarioLogado.coins;
+                salvarUsuariosBD(db);
+                alert("🎉 Compra realizada com sucesso na fábrica!");
+            } else {
+                alert("🪙 Batata-Coins insuficientes! Continue conversando para ganhar mais.");
+            }
+        }
+
+        function enviarCodigoVerificacao() {
+            const email = document.getElementById('forgot-email').value.trim();
+            const fone = document.getElementById('forgot-phone').value.trim();
+            let db = obterUsuariosBD();
+            let conta = db[fone];
+
+            if(conta && conta.email === email) {
+                telefoneRecuperacao = fone;
+                codigoGerado = Math.floor(1000 + Math.random() * 9000); 
+                alert(`🍟 [CÓDIGO GERADO]\nSeu código de recuperação é: ${codigoGerado}`);
+                document.getElementById('step-1').classList.add('hidden');
+                document.getElementById('step-2').classList.remove('hidden');
+            } else { alert("Nenhuma conta encontrada!"); }
+        }
+
+        function verificarCodigo() {
+            if(document.getElementById('verification-code-input').value.trim() === String(codigoGerado)) {
+                alert("Confirmado!");
+                document.getElementById('step-2').classList.add('hidden');
+                document.getElementById('step-3').classList.remove('hidden');
+            } else { alert("Código incorreto!"); }
+        }
+
+        function atualizarSenha() {
+            const novaSenha = document.getElementById('new-password-input').value;
+            if(!novaSenha) return;
+            let db = obterUsuariosBD();
+            if(db[telefoneRecuperacao]) {
+                db[telefoneRecuperacao].senha = novaSenha;
+                salvarUsuariosBD(db);
+                alert("Senha alterada!");
+                alternarTela('login');
+            }
         }
 
         function adicionarContato() {
             const numAlvo = document.getElementById('search-phone').value.trim();
-            if(!numAlvo) return;
-            if(numAlvo === usuarioLogado.fone) return alert("Você não pode se adicionar!");
-
+            if(!numAlvo || numAlvo === usuarioLogado.fone) return;
             let db = obterUsuariosBD();
-            let amigo = db[numAlvo];
-
-            if(!amigo) return alert("Número não cadastrado!");
+            if(!db[numAlvo]) return alert("Número não cadastrado!");
 
             if(!usuarioLogado.contatos) usuarioLogado.contatos = [];
-            if(usuarioLogado.contatos.includes(numAlvo)) return alert("Já é seu contato!");
+            if(usuarioLogado.contatos.includes(numAlvo)) return alert("Já adicionado!");
 
             usuarioLogado.contatos.push(numAlvo);
             db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
             salvarUsuariosBD(db);
-
             document.getElementById('search-phone').value = "";
-            alert("Contato detectado!");
             atualizarListaContatos();
         }
 
         function obterNomeExibicao(foneAlvo, dadosAmigo) {
-            if(!usuarioLogado.contatos) usuarioLogado.contatos = [];
-            
-            if(usuarioLogado.contatos.includes(foneAlvo)) {
-                if(usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[foneAlvo]) {
-                    return usuarioLogado.nomesCustomizados[foneAlvo];
-                }
-                return dadosAmigo ? dadosAmigo.nome : "Batata Amiga";
-            }
-            return "Anônimo (" + foneAlvo + ")";
+            if(!usuarioLogado.contatos.includes(foneAlvo)) return "Anônimo (" + foneAlvo + ")";
+            if(usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[foneAlvo]) return usuarioLogado.nomesCustomizados[foneAlvo];
+            return dadosAmigo ? dadosAmigo.nome : "Batata Amiga";
         }
 
         function atualizarListaContatosPeriodico() {
@@ -724,7 +851,6 @@
                     alterou = true;
                 }
             });
-
             if(alterou) {
                 db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
                 salvarUsuariosBD(db);
@@ -735,7 +861,6 @@
         function atualizarListaContatos() {
             const container = document.getElementById('contacts-container');
             if(!container) return;
-            
             const scrollPos = container.scrollTop;
             container.innerHTML = "";
             let db = obterUsuariosBD();
@@ -743,14 +868,20 @@
 
             meusContatos.forEach(foneNum => {
                 let dadosAmigo = db[foneNum];
-                
                 let item = document.createElement('div');
                 item.className = "contact-item" + (contatoAtivoNum === foneNum ? " active" : "");
                 item.onclick = function() { abrirConversa(foneNum); };
                 
                 let nomeExibicao = obterNomeExibicao(foneNum, dadosAmigo);
+                let amigoStatus = dadosAmigo && dadosAmigo.status ? dadosAmigo.status : 'frita';
 
-                item.innerHTML = '<div style="font-weight:bold;">🥔 '+nomeExibicao+'</div><div style="font-size:12px;color:#7f6855">Tel: '+foneNum+'</div>';
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight:bold;">🥔 ${nomeExibicao}</div>
+                        <div style="font-size:12px;color:#7f6855">Tel: ${foneNum}</div>
+                    </div>
+                    <span class="status-badge status-${amigoStatus}"></span>
+                `;
                 container.appendChild(item);
             });
             container.scrollTop = scrollPos;
@@ -763,18 +894,14 @@
 
             document.getElementById('chat-blank-state').classList.add('hidden');
             document.getElementById('chat-active-state').classList.remove('hidden');
-            
-            let nomeExibicao = obterNomeExibicao(foneNum, amigo);
-            document.getElementById('chat-with-name').innerText = nomeExibicao;
+            document.getElementById('chat-with-name').innerText = obterNomeExibicao(foneNum, amigo);
             document.getElementById('chat-with-details').innerText = "Tel: " + foneNum;
             
             const btnSalvar = document.getElementById('btn-salvar-anonimo');
-            if(!usuarioLogado.nomesCustomizados || !usuarioLogado.nomesCustomizados[foneNum]) {
-                btnSalvar.classList.remove('hidden');
-            } else {
-                btnSalvar.classList.add('hidden');
-            }
+            if(!usuarioLogado.nomesCustomizados || !usuarioLogado.nomesCustomizados[foneNum]) btnSalvar.classList.remove('hidden');
+            else btnSalvar.classList.add('hidden');
 
+            // Reseta controle de renderização
             totalMensagensAntigas = 0; 
             atualizarListaContatos();
             renderizarMensagens();
@@ -782,30 +909,54 @@
 
         function salvarContatoAnonimo() {
             alert("⚠️ ATENÇÃO: Só salve pessoas confiáveis!");
-            
-            let novoNome = prompt("Digite o nome para salvar este Batata-Amigo:");
+            let novoNome = prompt("Nome para este Batata-Amigo:");
             if(!novoNome || !novoNome.trim()) return;
 
             if(!usuarioLogado.nomesCustomizados) usuarioLogado.nomesCustomizados = {};
             usuarioLogado.nomesCustomizados[contatoAtivoNum] = novoNome.trim();
-            
-            if(!usuarioLogado.contatos.includes(contatoAtivoNum)) {
-                usuarioLogado.contatos.push(contatoAtivoNum);
-            }
+            if(!usuarioLogado.contatos.includes(contatoAtivoNum)) usuarioLogado.contatos.push(contatoAtivoNum);
 
             let db = obterUsuariosBD();
             db[usuarioLogado.fone].nomesCustomizados = usuarioLogado.nomesCustomizados;
             db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
             salvarUsuariosBD(db);
 
-            alert("Contato salvo com sucesso!");
-            
             document.getElementById('chat-with-name').innerText = novoNome.trim();
             document.getElementById('btn-salvar-anonimo').classList.add('hidden');
             atualizarListaContatos();
-            
-            totalMensagensAntigas = 0; 
-            renderizarMensagens();
+            totalMensagensAntigas = 0; renderizarMensagens();
+        }
+
+        /* --- SISTEMA BATATA QUENTE --- */
+        function toggleModoBatataQuente() {
+            modoBatataQuenteAtivo = !modoBatataQuenteAtivo;
+            const btn = document.getElementById('btn-potato-mode');
+            if(modoBatataQuenteAtivo) {
+                btn.classList.add('active');
+                btn.innerText = "🔥";
+            } else {
+                btn.classList.remove('active');
+                btn.innerText = "⏱️";
+            }
+        }
+
+        function processarCronometroBatatasQuentes() {
+            let todasMsgs = obterMensagensBD();
+            let agora = Date.now();
+            let mudou = false;
+
+            let novasMsgs = todasMsgs.filter(m => {
+                if (m.isHotPotato && agora >= m.expireAt) {
+                    mudou = true;
+                    return false; // Remove do BD local
+                }
+                return true;
+            });
+
+            if (mudou) {
+                salvarMensagensBD(novasMsgs);
+                renderizarMensagens();
+            }
         }
 
         function renderizarMensagens() {
@@ -818,36 +969,55 @@
                 (m.de === contatoAtivoNum && m.para === usuarioLogado.fone)
             );
 
-            if(totalMensagensAntigas === msgsFiltradas.length) return;
+            if(totalMensagensAntigas === msgsFiltradas.length) {
+                // Atualiza contadores de tempo visualmente sem re-renderizar tudo
+                msgsFiltradas.forEach(m => {
+                    if(m.isHotPotato) {
+                        let el = document.getElementById('timer-' + m.timestamp);
+                        if(el) {
+                            let restante = Math.ceil((m.expireAt - Date.now()) / 1000);
+                            el.innerText = restante > 0 ? " ⏳ " + restante + "s" : " 💥";
+                        }
+                    }
+                });
+                return;
+            }
+            
             totalMensagensAntigas = msgsFiltradas.length;
-
             container.innerHTML = "";
+
             msgsFiltradas.forEach(m => {
                 let div = document.createElement('div');
                 div.className = "msg " + (m.de === usuarioLogado.fone ? "sent" : "received");
+                if (m.isHotPotato) div.classList.add('hot-potato-style');
                 
                 let spanFone = document.createElement('span');
                 spanFone.className = "sender-phone";
-                
-                if(m.de === usuarioLogado.fone) {
-                    spanFone.innerText = usuarioLogado.nome + " (" + m.de + ")";
-                } else {
-                    let nomeIdentificador = usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[m.de] 
-                        ? usuarioLogado.nomesCustomizados[m.de] 
-                        : "Anônimo";
+                if(m.de === usuarioLogado.fone) spanFone.innerText = usuarioLogado.nome + " (" + m.de + ")";
+                else {
+                    let nomeIdentificador = usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[m.de] ? usuarioLogado.nomesCustomizados[m.de] : "Anônimo";
                     spanFone.innerText = nomeIdentificador + " (" + m.de + ")";
                 }
-                
                 div.appendChild(spanFone);
 
-                if(m.tipo === 'texto') {
-                    let textoNode = document.createTextNode(m.conteudo);
-                    div.appendChild(textoNode);
-                } else {
-                    let fileContainer = document.createElement('span');
-                    fileContainer.innerHTML = '📁 <strong>Arquivo:</strong><br><a class="file-link" href="'+m.conteudo+'" download="'+m.nomeArquivo+'">'+m.nomeArquivo+'</a>';
-                    div.appendChild(fileContainer);
+                let contentSpan = document.createElement('span');
+                if(m.tipo === 'texto') contentSpan.appendChild(document.createTextNode(m.conteudo));
+                else {
+                    contentSpan.innerHTML = '📁 <strong>Arquivo:</strong><br><a class="file-link" href="'+m.conteudo+'" download="'+m.nomeArquivo+'">'+m.nomeArquivo+'</a>';
                 }
+                div.appendChild(contentSpan);
+
+                if (m.isHotPotato) {
+                    let timerSpan = document.createElement('span');
+                    timerSpan.id = 'timer-' + m.timestamp;
+                    timerSpan.style.fontSize = '10px';
+                    timerSpan.style.display = 'block';
+                    timerSpan.style.textAlign = 'right';
+                    timerSpan.style.marginTop = '4px';
+                    timerSpan.innerText = " ⏳ 5s";
+                    div.appendChild(timerSpan);
+                }
+
                 container.appendChild(div);
             });
             container.scrollTop = container.scrollHeight;
@@ -859,8 +1029,27 @@
             if(!texto || !contatoAtivoNum) return;
 
             let todasMsgs = obterMensagensBD();
-            todasMsgs.push({ de: usuarioLogado.fone, para: contatoAtivoNum, tipo: 'texto', conteudo: texto });
+            let TS = Date.now();
+            
+            let novaMsg = { 
+                de: usuarioLogado.fone, 
+                para: contatoAtivoNum, 
+                tipo: 'texto', 
+                conteudo: texto,
+                timestamp: TS,
+                isHotPotato: modoBatataQuenteAtmini = modoBatataQuenteAtivo,
+                expireAt: modoBatataQuenteAtivo ? TS + 5000 : null
+            };
+
+            todasMsgs.push(novaMsg);
             salvarMensagensBD(todasMsgs);
+
+            usuarioLogado.coins += 1;
+            document.getElementById('coin-count').innerText = usuarioLogado.coins;
+            let db = obterUsuariosBD();
+            db[usuarioLogado.fone].coins = usuarioLogado.coins;
+            salvarUsuariosBD(db);
+
             input.value = "";
             renderizarMensagens();
             input.focus();
@@ -869,16 +1058,76 @@
         function enviarArquivo(inputElement) {
             const arquivo = inputElement.files[0];
             if(!arquivo || !contatoAtivoNum) return;
-
             const leitor = new FileReader();
             leitor.onload = function(e) {
                 let todasMsgs = obterMensagensBD();
-                todasMsgs.push({ de: usuarioLogado.fone, para: contatoAtivoNum, tipo: 'arquivo', conteudo: e.target.result, nomeArquivo: arquivo.name });
+                let TS = Date.now();
+                todasMsgs.push({ 
+                    de: usuarioLogado.fone, 
+                    para: contatoAtivoNum, 
+                    tipo: 'arquivo', 
+                    conteudo: e.target.result, 
+                    nomeArquivo: arquivo.name,
+                    timestamp: TS,
+                    isHotPotato: modoBatataQuenteAtivo,
+                    expireAt: modoBatataQuenteAtivo ? TS + 5000 : null
+                });
                 salvarMensagensBD(todasMsgs);
+                
+                usuarioLogado.coins += 1;
+                document.getElementById('coin-count').innerText = usuarioLogado.coins;
+                let db = obterUsuariosBD(); db[usuarioLogado.fone].coins = usuarioLogado.coins; salvarUsuariosBD(db);
+
                 renderizarMensagens();
             };
             leitor.readAsDataURL(arquivo);
             inputElement.value = "";
+        }
+
+        /* --- TELEFONE DE BATATA (LIGAÇÃO TEATRAL) --- */
+        function tocarSomTeatral(frequencia, duracao) {
+            try {
+                if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = audioContext.createOscillator();
+                let gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.frequency.value = frequencia;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+                osc.start();
+                osc.stop(audioContext.currentTime + duracao);
+            } catch(e){}
+        }
+
+        function iniciarLigacao() {
+            let db = obterUsuariosBD();
+            let nomeAmigo = obterNomeExibicao(contatoAtivoNum, db[contatoAtivoNum]);
+            
+            document.getElementById('call-user-name').innerText = nomeAmigo;
+            document.getElementById('call-status-text').innerText = "Discando linha de amido...";
+            document.getElementById('call-screen').classList.remove('hidden');
+
+            // Simula o som clássico de chamada telefônica (Tuuu... Tuuu...)
+            tocarSomTeatral(350, 0.8);
+            ringInterval = setInterval(() => {
+                tocarSomTeatral(350, 0.8);
+            }, 2500);
+
+            // Resposta teatral automática do bot amigo após 5 segundos
+            setTimeout(() => {
+                if(!document.getElementById('call-screen').classList.contains('hidden')) {
+                    clearInterval(ringInterval);
+                    document.getElementById('call-status-text').innerHTML = "🟢 CHAMADA ATENDIDA!<br><br><span style='font-size:14px; color:#fff;'>\"Alô? É da pastelaria? Quero duas porções de batata frita rústica e uma coquinha gelada por favor... Alô?\"</span>";
+                    tocarSomTeatral(600, 0.2);
+                }
+            }, 5000);
+        }
+
+        function desligarChamada() {
+            clearInterval(ringInterval);
+            tocarSomTeatral(150, 0.5); // Som de encerramento
+            document.getElementById('call-screen').classList.add('hidden');
         }
     </script>
 </body>
