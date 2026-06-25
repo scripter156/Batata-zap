@@ -19,6 +19,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
         }
 
         .container {
@@ -27,6 +28,7 @@
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+            z-index: 5;
         }
 
         h2 {
@@ -136,6 +138,7 @@
             text-align: center;
         }
 
+        /* --- TELA PRINCIPAL APP --- */
         #app-screen {
             width: 95vw;
             max-width: 1200px;
@@ -145,6 +148,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             overflow: hidden;
+            z-index: 5;
         }
 
         .sidebar {
@@ -311,9 +315,99 @@
         .btn-salvar-contato:hover {
             background-color: #e6b800;
         }
+
+        /* =======================================================
+           ESTRUTURA DA ANIMAÇÃO ÉPICA DE BATATA 🍟💥
+        ======================================================= */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, #22140a 0%, #050302 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #loading-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .super-batata {
+            font-size: 100px;
+            animation: zoomExplosivo 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate, girarGlow 4s linear infinite;
+            filter: drop-shadow(0 0 30px #ffcc00);
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-text {
+            color: #fff;
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-family: 'Impact', sans-serif;
+            background: linear-gradient(to bottom, #fff 30%, #ffcc00 60%, #ff3300 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 10px rgba(255,51,0,0.8));
+            margin-top: 20px;
+            transform: scale(0);
+            animation: entradaTexto 0.8s 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.5);
+            z-index: 2;
+        }
+
+        /* Partículas voando no fundo */
+        .particle {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            animation: explodirParticula 2.5s linear infinite;
+        }
+
+        @keyframes zoomExplosivo {
+            0% { transform: scale(0.8); filter: drop-shadow(0 0 20px #ff9900); }
+            100% { transform: scale(1.15); filter: drop-shadow(0 0 50px #ffcc00); }
+        }
+
+        @keyframes girarGlow {
+            0% { transform: rotate(0deg) scale(var(--scale, 1)); }
+            50% { transform: rotate(180deg) scale(var(--scale, 1.1)); }
+            100% { transform: rotate(360deg) scale(var(--scale, 1)); }
+        }
+
+        @keyframes entradaTexto {
+            to { transform: scale(1); }
+        }
+
+        @keyframes explodirParticula {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(0);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- OVERLAY DA ANIMAÇÃO SUPREMA -->
+    <div id="loading-overlay">
+        <div class="super-batata" id="anim-logo">🍟</div>
+        <div class="logo-text">BATATA ZAP</div>
+    </div>
 
     <!-- 1. TELA DE CADASTRO -->
     <div id="register-screen" class="container">
@@ -393,7 +487,6 @@
                         <h3 id="chat-with-name">Nome</h3>
                         <span id="chat-with-details" style="font-size:12px;"></span>
                     </div>
-                    <!-- Botão de Salvar Contato Dinâmico -->
                     <button id="btn-salvar-anonimo" class="btn-salvar-contato hidden" onclick="salvarContatoAnonimo()">💾 Salvar Batata</button>
                 </div>
                 <div class="chat-messages" id="messages-container"></div>
@@ -428,6 +521,51 @@
         let telefoneRecuperacao = null;
         let totalMensagensAntigas = 0;
 
+        // DISPARADOR DA ANIMAÇÃO ÉPICA DE LOADING
+        function dispararAnimacaoEntrada(callbackSucesso) {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.classList.add('active');
+            
+            // Cria efeito de explosão de batatas flutuantes
+            for (let i = 0; i < 40; i++) {
+                criarParticulaBatata();
+            }
+
+            // Aguarda 3 segundos de show visual e libera o app
+            setTimeout(() => {
+                overlay.classList.remove('active');
+                // Remove as partículas geradas do HTML após sumir
+                setTimeout(() => {
+                    document.querySelectorAll('.particle').forEach(el => el.remove());
+                }, 500);
+                callbackSucesso();
+            }, 3000);
+        }
+
+        function criarParticulaBatata() {
+            const overlay = document.getElementById('loading-overlay');
+            const p = document.createElement('div');
+            p.className = 'particle';
+            
+            const emojis = ['🍟', '🥔', '💥', '✨'];
+            p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Direções aleatórias calculadas dinamicamente
+            const x = (Math.random() - 0.5) * window.innerWidth * 0.8;
+            const y = (Math.random() - 0.5) * window.innerHeight * 0.8;
+            const r = Math.random() * 360 + 180;
+            
+            p.style.setProperty('--x', `${x}px`);
+            p.style.setProperty('--y', `${y}px`);
+            p.style.setProperty('--r', `${r}deg`);
+            
+            // Ponto central de explosão
+            p.style.left = '50%';
+            p.style.top = '50%';
+            
+            overlay.appendChild(p);
+        }
+
         function alternarTela(tela) {
             document.getElementById('register-screen').classList.add('hidden');
             document.getElementById('login-screen').classList.add('hidden');
@@ -457,8 +595,9 @@
             db[fone] = { nome, email, senha, fone, contatos: [], nomesCustomizados: {} };
             salvarUsuariosBD(db);
 
-            alert("Conta criada!");
-            fazerLoginEfetivo(db[fone]);
+            dispararAnimacaoEntrada(() => {
+                fazerLoginEfetivo(db[fone]);
+            });
         }
 
         function login() {
@@ -473,7 +612,10 @@
 
             if(conta && conta.email === email && conta.senha === senha) {
                 if(!conta.nomesCustomizados) conta.nomesCustomizados = {};
-                fazerLoginEfetivo(conta);
+                
+                dispararAnimacaoEntrada(() => {
+                    fazerLoginEfetivo(conta);
+                });
             } else {
                 alert("Dados incorretos! Verifique os dados digitados.");
             }
@@ -518,7 +660,7 @@
             if(db[telefoneRecuperacao]) {
                 db[telefoneRecuperacao].senha = novaSenha;
                 salvarUsuariosBD(db);
-                alert("Senha updated! Faça login.");
+                alert("Senha alterada! Faça login.");
                 alternarTela('login');
             }
         }
@@ -534,7 +676,7 @@
             atualizarListaContatos();
             
             setInterval(renderizarMensagens, 1000);
-            setInterval(atualizarListaContatosPeriodico, 2000); // Mantém a lista lateral atualizada se novos chats entrarem
+            setInterval(atualizarListaContatosPeriodico, 2000); 
         }
 
         function adicionarContato() {
@@ -559,23 +701,19 @@
             atualizarListaContatos();
         }
 
-        // Lógica de proteção e anonimato para exibição de nomes
         function obterNomeExibicao(foneAlvo, dadosAmigo) {
             if(!usuarioLogado.contatos) usuarioLogado.contatos = [];
             
-            // Se o usuário já salvou essa pessoa na lista dele
             if(usuarioLogado.contatos.includes(foneAlvo)) {
                 if(usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[foneAlvo]) {
                     return usuarioLogado.nomesCustomizados[foneAlvo];
                 }
                 return dadosAmigo ? dadosAmigo.nome : "Batata Amiga";
             }
-            // Se não salvou, aparece como Anônimo
             return "Anônimo (" + foneAlvo + ")";
         }
 
         function atualizarListaContatosPeriodico() {
-            // Varre o banco de mensagens para ver se alguém enviou mensagem sem estar na lista de contatos
             let todasMsgs = obterMensagensBD();
             let db = obterUsuariosBD();
             let alterou = false;
@@ -598,7 +736,6 @@
             const container = document.getElementById('contacts-container');
             if(!container) return;
             
-            // Preserva o scroll original
             const scrollPos = container.scrollTop;
             container.innerHTML = "";
             let db = obterUsuariosBD();
@@ -631,7 +768,6 @@
             document.getElementById('chat-with-name').innerText = nomeExibicao;
             document.getElementById('chat-with-details').innerText = "Tel: " + foneNum;
             
-            // Controla a visibilidade do botão Salvar caso seja Anônimo
             const btnSalvar = document.getElementById('btn-salvar-anonimo');
             if(!usuarioLogado.nomesCustomizados || !usuarioLogado.nomesCustomizados[foneNum]) {
                 btnSalvar.classList.remove('hidden');
@@ -644,7 +780,6 @@
             renderizarMensagens();
         }
 
-        // Função do botão de salvar com aviso de segurança
         function salvarContatoAnonimo() {
             alert("⚠️ ATENÇÃO: Só salve pessoas confiáveis!");
             
@@ -654,7 +789,6 @@
             if(!usuarioLogado.nomesCustomizados) usuarioLogado.nomesCustomizados = {};
             usuarioLogado.nomesCustomizados[contatoAtivoNum] = novoNome.trim();
             
-            // Se por algum motivo não estava no array de contatos, adiciona agora
             if(!usuarioLogado.contatos.includes(contatoAtivoNum)) {
                 usuarioLogado.contatos.push(contatoAtivoNum);
             }
@@ -666,7 +800,6 @@
 
             alert("Contato salvo com sucesso!");
             
-            // Atualiza a tela imediatamente
             document.getElementById('chat-with-name').innerText = novoNome.trim();
             document.getElementById('btn-salvar-anonimo').classList.add('hidden');
             atualizarListaContatos();
@@ -679,7 +812,6 @@
             if(!contatoAtivoNum) return;
             const container = document.getElementById('messages-container');
             let todasMsgs = obterMensagensBD();
-            let db = obterUsuariosBD();
 
             let msgsFiltradas = todasMsgs.filter(m => 
                 (m.de === usuarioLogado.fone && m.para === contatoAtivoNum) ||
@@ -697,7 +829,6 @@
                 let spanFone = document.createElement('span');
                 spanFone.className = "sender-phone";
                 
-                // Exibe o nome customizado se houver ou mantém o número
                 if(m.de === usuarioLogado.fone) {
                     spanFone.innerText = usuarioLogado.nome + " (" + m.de + ")";
                 } else {
@@ -752,3 +883,4 @@
     </script>
 </body>
 </html>
+
