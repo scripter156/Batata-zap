@@ -72,6 +72,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: background 0.2s;
+            margin-bottom: 10px;
         }
 
         button:hover {
@@ -89,13 +90,14 @@
             color: #da8f31;
             text-decoration: none;
             font-weight: bold;
+            margin: 0 5px;
         }
 
         .hidden {
             display: none !important;
         }
 
-        /* --- TELA PRINCIPAL DO BATATAZAP --- */
+        /* --- TELA PRINCIPAL APP --- */
         #app-screen {
             width: 95vw;
             max-width: 1200px;
@@ -128,14 +130,6 @@
             color: #5c3a21;
         }
 
-        .config-btn {
-            background: none;
-            color: #da8f31;
-            padding: 5px 10px;
-            font-size: 14px;
-            width: auto;
-        }
-
         .action-area {
             padding: 15px;
             background-color: #fff9f2;
@@ -166,16 +160,6 @@
 
         .contact-item.active {
             background-color: #ffe8cc;
-        }
-
-        .contact-item .name {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .contact-item .details {
-            font-size: 12px;
-            color: #7f6855;
         }
 
         .chat-area {
@@ -261,11 +245,6 @@
             cursor: pointer;
             font-size: 18px;
         }
-
-        .btn-send {
-            width: auto;
-            padding: 12px 25px;
-        }
     </style>
 </head>
 <body>
@@ -286,46 +265,61 @@
         <div class="form-group"><label>Número de Telefone</label><input type="tel" id="login-phone" placeholder="Ex: 11999999999"></div>
         <div class="form-group"><label>Senha</label><input type="password" id="login-password" placeholder="Sua senha"></div>
         <button onclick="login()">Entrar</button>
-        <div class="switch-form">Não tem conta? <a href="#" onclick="alternarTela('register')">Cadastre-se</a></div>
+        <div class="switch-form">
+            <a href="#" onclick="alternarTela('forgot')">Esqueci a Senha</a> |
+            <a href="#" onclick="alternarTela('register')">Cadastre-se</a>
+        </div>
+    </div>
+
+    <div id="forgot-screen" class="container hidden">
+        <h2>🥔 Recuperar Senha</h2>
+        <div id="step-1">
+            <div class="form-group"><label>Gmail Cadastrado</label><input type="email" id="forgot-email" placeholder="nome@gmail.com"></div>
+            <div class="form-group"><label>Número de Telefone</label><input type="tel" id="forgot-phone" placeholder="Ex: 11999999999"></div>
+            <button onclick="enviarCodigoVerificacao()">Enviar Código</button>
+        </div>
+        
+        <div id="step-2" class="hidden">
+            <div class="form-group"><label style="color: #be751c;">Código enviado para o seu Gmail!</label><input type="text" id="verification-code-input" placeholder="Digite o código de 4 dígitos"></div>
+            <button onclick="verificarCodigo()">Validar Código</button>
+        </div>
+
+        <div id="step-3" class="hidden">
+            <div class="form-group"><label>Nova Senha</label><input type="password" id="new-password-input" placeholder="Digite a nova senha"></div>
+            <button onclick="atualizarSenha()">Atualizar Senha</button>
+        </div>
+        <div class="switch-form"><a href="#" onclick="alternarTela('login')">Voltar para o Login</a></div>
     </div>
 
     <div id="app-screen" class="hidden">
         <div class="sidebar">
             <div class="sidebar-header">
                 <h3 id="my-profile-name">Meu Perfil</h3>
-                <button class="config-btn" onclick="abrirConfiguracoes()">⚙️ Configs</button>
+                <button style="width:auto; padding: 5px;" onclick="alert('Nome: '+usuarioLogado.nome+'\nEmail: '+usuarioLogado.email)">⚙️ Info</button>
             </div>
-
             <div class="action-area">
                 <label>Adicionar pelo Número:</label>
-                <input type="tel" id="search-phone" placeholder="Digite o número do amigo...">
+                <input type="tel" id="search-phone" placeholder="Número do amigo...">
                 <button onclick="adicionarContato()">Adicionar Batata-Amigo</button>
             </div>
-
             <div class="contact-list" id="contacts-container"></div>
         </div>
 
         <div class="chat-area">
             <div id="chat-blank-state" class="chat-blank">
                 <span style="font-size: 50px;">🥔</span>
-                <p>Selecione uma batata para começar a conversar!</p>
+                <p>Selecione uma batata para conversar!</p>
             </div>
-
             <div id="chat-active-state" class="chat-area hidden">
                 <div class="chat-header">
-                    <h3 id="chat-with-name">Nome do Amigo</h3>
-                    <span id="chat-with-details" style="font-size:12px; color: #7f6855;"></span>
+                    <h3 id="chat-with-name">Nome</h3>
+                    <span id="chat-with-details" style="font-size:12px;"></span>
                 </div>
-                
                 <div class="chat-messages" id="messages-container"></div>
-
                 <div class="chat-input-bar">
-                    <label class="file-label" title="Enviar arquivo">
-                        📁
-                        <input type="file" id="file-input" style="display: none;" onchange="enviarArquivo(this)">
-                    </label>
-                    <input type="text" id="message-text-input" placeholder="Digite sua batata-mensagem...">
-                    <button class="btn-send" onclick="enviarMensagemTexto()">Enviar</button>
+                    <label class="file-label">📁<input type="file" id="file-input" style="display: none;" onchange="enviarArquivo(this)"></label>
+                    <input type="text" id="message-text-input" placeholder="Digite uma mensagem...">
+                    <button style="width:auto; padding:12px 20px;" onclick="enviarMensagemTexto()">Enviar</button>
                 </div>
             </div>
         </div>
@@ -333,26 +327,39 @@
 
     <script>
         function obterUsuariosBD() {
-            return JSON.parse(localStorage.getItem('bz_usuarios')) || {};
+            try { return JSON.parse(localStorage.getItem('bz_usuarios')) || {}; } 
+            catch(e) { return {}; }
         }
         function salvarUsuariosBD(db) {
             localStorage.setItem('bz_usuarios', JSON.stringify(db));
         }
         function obterMensagensBD() {
-            return JSON.parse(localStorage.getItem('bz_mensagens')) || [];
+            try { return JSON.parse(localStorage.getItem('bz_messages')) || []; } 
+            catch(e) { return []; }
         }
         function salvarMensagensBD(msgs) {
-            localStorage.setItem('bz_mensagens', JSON.stringify(msgs));
+            localStorage.setItem('bz_messages', JSON.stringify(msgs));
         }
 
         let usuarioLogado = null;
         let contatoAtivoNum = null;
+        let codigoGerado = null;
+        let telefoneRecuperacao = null;
+        let totalMensagensAntigas = 0;
 
         function alternarTela(tela) {
             document.getElementById('register-screen').classList.add('hidden');
             document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('forgot-screen').classList.add('hidden');
+            
             if (tela === 'login') document.getElementById('login-screen').classList.remove('hidden');
-            else document.getElementById('register-screen').classList.remove('hidden');
+            if (tela === 'register') document.getElementById('register-screen').classList.remove('hidden');
+            if (tela === 'forgot') {
+                document.getElementById('forgot-screen').classList.remove('hidden');
+                document.getElementById('step-1').classList.remove('hidden');
+                document.getElementById('step-2').classList.add('hidden');
+                document.getElementById('step-3').classList.add('hidden');
+            }
         }
 
         function cadastrar() {
@@ -361,15 +368,15 @@
             const senha = document.getElementById('reg-password').value;
             const fone = document.getElementById('reg-phone').value.trim();
 
-            if(!nome || !email || !senha || !fone) return alert("Preencha todos os campos!");
+            if(!nome || !email || !senha || !fone) return alert("Por favor, preencha todos os campos!");
 
             let db = obterUsuariosBD();
-            if(db[fone]) return alert("Este número já está cadastrado!");
+            if(db[fone]) return alert("Esse número já possui conta!");
 
             db[fone] = { nome, email, senha, fone, contatos: [] };
             salvarUsuariosBD(db);
 
-            alert("Conta Batata criada com sucesso!");
+            alert("Conta criada!");
             fazerLoginEfetivo(db[fone]);
         }
 
@@ -378,19 +385,65 @@
             const fone = document.getElementById('login-phone').value.trim();
             const senha = document.getElementById('login-password').value;
 
-            if(!email || !fone || !senha) return alert("Preencha todos os campos de login!");
+            if(!email || !fone || !senha) return alert("Preencha todos os campos!");
 
             let db = obterUsuariosBD();
             let conta = db[fone];
 
-            // Verifica se a conta existe pelo número e se e-mail e senha batem certinho
-            if (conta && conta.email === email && conta.senha === senha) {
+            if(conta && conta.email === email && conta.senha === senha) {
                 fazerLoginEfetivo(conta);
             } else {
                 alert("Dados incorretos! Verifique o Gmail, Número e Senha.");
             }
         }
 
+        // --- SISTEMA DE RECUPERAÇÃO DE SENHA ---
+        function enviarCodigoVerificacao() {
+            const email = document.getElementById('forgot-email').value.trim();
+            const fone = document.getElementById('forgot-phone').value.trim();
+
+            let db = obterUsuariosBD();
+            let conta = db[fone];
+
+            if(conta && conta.email === email) {
+                telefoneRecuperacao = fone;
+                codigoGerado = Math.floor(1000 + Math.random() * 9000); // Gera código de 4 dígitos
+                
+                // Simulação de envio para o e-mail via Alerta
+                alert(`[SIMULAÇÃO GMAIL]\nPara: ${email}\n\nSeu código de recuperação do BatataZap é: ${codigoGerado}`);
+                
+                document.getElementById('step-1').classList.add('hidden');
+                document.getElementById('step-2').classList.remove('hidden');
+            } else {
+                alert("Nenhuma conta encontrada com essa combinação de Gmail e Telefone!");
+            }
+        }
+
+        function verificarCodigo() {
+            const codigoDigitado = document.getElementById('verification-code-input').value.trim();
+            if(codigoDigitado === String(codigoGerado)) {
+                alert("Código confirmado com sucesso!");
+                document.getElementById('step-2').classList.add('hidden');
+                document.getElementById('step-3').classList.remove('hidden');
+            } else {
+                alert("Código incorreto! Tente novamente.");
+            }
+        }
+
+        function atualizarSenha() {
+            const novaSenha = document.getElementById('new-password-input').value;
+            if(!novaSenha) return alert("Digite a nova senha!");
+
+            let db = obterUsuariosBD();
+            if(db[telefoneRecuperacao]) {
+                db[telefoneRecuperacao].senha = novaSenha;
+                salvarUsuariosBD(db);
+                alert("Senha atualizada com sucesso! Faça login agora.");
+                alternarTela('login');
+            }
+        }
+
+        // --- SISTEMA DE CHAT ---
         function fazerLoginEfetivo(usuario) {
             usuarioLogado = usuario;
             document.getElementById('register-screen').classList.add('hidden');
@@ -398,15 +451,11 @@
             document.getElementById('app-screen').classList.remove('hidden');
             document.body.style.backgroundImage = "none";
 
-            document.getElementById('my-profile-name').innerText = `🥔 ${usuarioLogado.nome}`;
+            document.getElementById('my-profile-name').innerText = "🥔 " + usuarioLogado.nome;
             atualizarListaContatos();
             
-            // Fica checando novas mensagens na tela a cada 1 segundo
+            // Loop para atualizar mensagens fixado (sem bugar a digitação do usuário)
             setInterval(renderizarMensagens, 1000);
-        }
-
-        function abrirConfiguracoes() {
-            alert(`Configurações:\n\nNome: ${usuarioLogado.nome}\nEmail: ${usuarioLogado.email}\nNúmero: ${usuarioLogado.fone}`);
         }
 
         function adicionarContato() {
@@ -417,24 +466,23 @@
             let db = obterUsuariosBD();
             let amigo = db[numAlvo];
 
-            if(!amigo) return alert("Nenhuma batata encontrada com esse número!");
+            if(!amigo) return alert("Número não cadastrado!");
 
             if(!usuarioLogado.contatos) usuarioLogado.contatos = [];
-            if(usuarioLogado.contatos.includes(numAlvo)) return alert("Esse contato já foi adicionado!");
+            if(usuarioLogado.contatos.includes(numAlvo)) return alert("Já é seu contato!");
 
             usuarioLogado.contatos.push(numAlvo);
             db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
             salvarUsuariosBD(db);
 
             document.getElementById('search-phone').value = "";
-            alert(`${amigo.nome} adicionado aos contatos!`);
+            alert(amigo.nome + " adicionado!");
             atualizarListaContatos();
         }
 
         function atualizarListaContatos() {
             const container = document.getElementById('contacts-container');
             container.innerHTML = "";
-            
             let db = obterUsuariosBD();
             let meusContatos = usuarioLogado.contatos || [];
 
@@ -443,12 +491,9 @@
                 if(!dadosAmigo) return;
 
                 let item = document.createElement('div');
-                item.className = `contact-item ${contatoAtivoNum === foneNum ? 'active' : ''}`;
-                item.onclick = () => abrirConversa(foneNum);
-                item.innerHTML = `
-                    <div class="name">🥔 ${dadosAmigo.nome}</div>
-                    <div class="details">${dadosAmigo.email} | ${dadosAmigo.fone}</div>
-                `;
+                item.className = "contact-item" + (contatoAtivoNum === foneNum ? " active" : "");
+                item.onclick = function() { abrirConversa(foneNum); };
+                item.innerHTML = '<div style="font-weight:bold;">🥔 '+dadosAmigo.nome+'</div><div style="font-size:12px;color:#7f6855">'+dadosAmigo.email+'</div>';
                 container.appendChild(item);
             });
         }
@@ -460,21 +505,17 @@
 
             document.getElementById('chat-blank-state').classList.add('hidden');
             document.getElementById('chat-active-state').classList.remove('hidden');
-            
             document.getElementById('chat-with-name').innerText = amigo.nome;
-            document.getElementById('chat-with-details').innerText = `${amigo.email} • Tel: ${amigo.fone}`;
+            document.getElementById('chat-with-details').innerText = amigo.email + " | Tel: " + amigo.fone;
             
+            totalMensagensAntigas = 0; // Força recarregamento limpo ao trocar de chat
             atualizarListaContatos();
             renderizarMensagens();
         }
 
         function renderizarMensagens() {
             if(!contatoAtivoNum) return;
-
             const container = document.getElementById('messages-container');
-            const noFim = container.scrollHeight - container.scrollTop <= container.clientHeight + 60;
-
-            container.innerHTML = "";
             let todasMsgs = obterMensagensBD();
 
             let msgsFiltradas = todasMsgs.filter(m => 
@@ -482,21 +523,22 @@
                 (m.de === contatoAtivoNum && m.para === usuarioLogado.fone)
             );
 
+            // CORREÇÃO DO BUG: Só mexe no HTML se tiver mensagem nova real, evitando travar a digitação
+            if(totalMensagensAntigas === msgsFiltradas.length) return;
+            totalMensagensAntigas = msgsFiltradas.length;
+
+            container.innerHTML = "";
             msgsFiltradas.forEach(m => {
                 let div = document.createElement('div');
-                div.className = `msg ${m.de === usuarioLogado.fone ? 'sent' : 'received'}`;
-                
+                div.className = "msg " + (m.de === usuarioLogado.fone ? "sent" : "received");
                 if(m.tipo === 'texto') {
                     div.innerText = m.conteudo;
-                } else if(m.tipo === 'arquivo') {
-                    div.innerHTML = `📁 <strong>Arquivo:</strong><br><a class="file-link" href="${m.conteudo}" download="${m.nomeArquivo}">${m.nomeArquivo}</a>`;
+                } else {
+                    div.innerHTML = '📁 <strong>Arquivo:</strong><br><a class="file-link" href="'+m.conteudo+'" download="'+m.nomeArquivo+'">'+m.nomeArquivo+'</a>';
                 }
                 container.appendChild(div);
             });
-
-            if(noFim) {
-                container.scrollTop = container.scrollHeight;
-            }
+            container.scrollTop = container.scrollHeight;
         }
 
         function enviarMensagemTexto() {
@@ -505,17 +547,11 @@
             if(!texto || !contatoAtivoNum) return;
 
             let todasMsgs = obterMensagensBD();
-            todasMsgs.push({
-                de: usuarioLogado.fone,
-                para: contatoAtivoNum,
-                tipo: 'texto',
-                conteudo: texto,
-                timestamp: Date.now()
-            });
-
+            todasMsgs.push({ de: usuarioLogado.fone, para: contatoAtivoNum, tipo: 'texto', conteudo: texto });
             salvarMensagensBD(todasMsgs);
             input.value = "";
             renderizarMensagens();
+            input.focus();
         }
 
         function enviarArquivo(inputElement) {
@@ -525,15 +561,7 @@
             const leitor = new FileReader();
             leitor.onload = function(e) {
                 let todasMsgs = obterMensagensBD();
-                todasMsgs.push({
-                    de: usuarioLogado.fone,
-                    para: contatoAtivoNum,
-                    tipo: 'arquivo',
-                    conteudo: e.target.result,
-                    nomeArquivo: arquivo.name,
-                    timestamp: Date.now()
-                });
-
+                todasMsgs.push({ de: usuarioLogado.fone, para: contatoAtivoNum, tipo: 'arquivo', conteudo: e.target.result, nomeArquivo: arquivo.name });
                 salvarMensagensBD(todasMsgs);
                 renderizarMensagens();
             };
@@ -543,4 +571,3 @@
     </script>
 </body>
 </html>
-
