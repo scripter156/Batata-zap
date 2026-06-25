@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BatataZap 🥔</title>
+    <title>BatataZap 🥔🍟</title>
     <style>
         * {
             margin: 0;
@@ -97,7 +97,45 @@
             display: none !important;
         }
 
-        /* --- TELA PRINCIPAL APP --- */
+        .box-batata {
+            background-color: #fff9e6;
+            border: 3px dashed #ffcc00;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: inset 0 0 10px rgba(255, 204, 0, 0.2);
+            margin-top: 15px;
+        }
+
+        .box-batata label {
+            color: #d84b20;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .box-batata input {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            border: 2px solid #ffcc00;
+            background-color: #ffffff;
+            color: #d84b20;
+        }
+
+        .alert-security {
+            background-color: #ffebe6;
+            border-left: 5px solid #ff4d4d;
+            padding: 10px;
+            border-radius: 4px;
+            color: #cc0000;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
         #app-screen {
             width: 95vw;
             max-width: 1200px;
@@ -181,9 +219,12 @@
 
         .chat-header {
             background-color: #f5ece1;
-            padding: 17px 20px;
+            padding: 15px 20px;
             border-bottom: 1px solid #e9e5de;
             color: #5c3a21;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .chat-messages {
@@ -205,10 +246,22 @@
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
+        .msg .sender-phone {
+            font-size: 11px;
+            font-weight: bold;
+            color: #be751c;
+            margin-bottom: 3px;
+            display: block;
+        }
+
         .msg.sent {
             background-color: #fcdfa2;
             margin-left: auto;
             color: #4a3111;
+        }
+
+        .msg.sent .sender-phone {
+            color: #a46211;
         }
 
         .msg.received {
@@ -245,12 +298,27 @@
             cursor: pointer;
             font-size: 18px;
         }
+
+        .btn-salvar-contato {
+            background-color: #ffcc00;
+            color: #5c3a21;
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            width: auto;
+            margin-bottom: 0;
+        }
+        .btn-salvar-contato:hover {
+            background-color: #e6b800;
+        }
     </style>
 </head>
 <body>
 
+    <!-- 1. TELA DE CADASTRO -->
     <div id="register-screen" class="container">
         <h2>🥔 BatataZap - Criar Conta</h2>
+        <div class="alert-security">⚠️ ATENÇÃO: Nunca compartilhe seu Gmail e senha com ninguém!</div>
         <div class="form-group"><label>Nome</label><input type="text" id="reg-name" placeholder="Seu nome"></div>
         <div class="form-group"><label>Gmail</label><input type="email" id="reg-email" placeholder="nome@gmail.com"></div>
         <div class="form-group"><label>Senha</label><input type="password" id="reg-password" placeholder="Sua senha"></div>
@@ -259,8 +327,10 @@
         <div class="switch-form">Já tenho uma conta? <a href="#" onclick="alternarTela('login')">Entrar</a></div>
     </div>
 
+    <!-- 2. TELA DE LOGIN -->
     <div id="login-screen" class="container hidden">
         <h2>🥔 BatataZap - Login</h2>
+        <div class="alert-security">⚠️ SEGURANÇA: Mantenha seus dados de acesso sempre em segredo.</div>
         <div class="form-group"><label>Gmail</label><input type="email" id="login-email" placeholder="nome@gmail.com"></div>
         <div class="form-group"><label>Número de Telefone</label><input type="tel" id="login-phone" placeholder="Ex: 11999999999"></div>
         <div class="form-group"><label>Senha</label><input type="password" id="login-password" placeholder="Sua senha"></div>
@@ -271,17 +341,23 @@
         </div>
     </div>
 
+    <!-- 3. TELA DE RECUPERAÇÃO DE SENHA -->
     <div id="forgot-screen" class="container hidden">
-        <h2>🥔 Recuperar Senha</h2>
+        <h2>🍟 Recuperar Senha</h2>
+        <div class="alert-security">⚠️ Proteja sua conta! Não envie códigos ou senhas para terceiros.</div>
+        
         <div id="step-1">
             <div class="form-group"><label>Gmail Cadastrado</label><input type="email" id="forgot-email" placeholder="nome@gmail.com"></div>
             <div class="form-group"><label>Número de Telefone</label><input type="tel" id="forgot-phone" placeholder="Ex: 11999999999"></div>
-            <button onclick="enviarCodigoVerificacao()">Enviar Código</button>
+            <button onclick="enviarCodigoVerificacao()">Gerar Código Batata</button>
         </div>
         
         <div id="step-2" class="hidden">
-            <div class="form-group"><label style="color: #be751c;">Código enviado para o seu Gmail!</label><input type="text" id="verification-code-input" placeholder="Digite o código de 4 dígitos"></div>
-            <button onclick="verificarCodigo()">Validar Código</button>
+            <div class="box-batata">
+                <label>🍟 Digite o Batata-Código de 4 dígitos:</label>
+                <input type="text" id="verification-code-input" maxlength="4" placeholder="0000">
+            </div>
+            <button style="margin-top:15px;" onclick="verificarCodigo()">Validar Código</button>
         </div>
 
         <div id="step-3" class="hidden">
@@ -291,11 +367,12 @@
         <div class="switch-form"><a href="#" onclick="alternarTela('login')">Voltar para o Login</a></div>
     </div>
 
+    <!-- 4. TELA PRINCIPAL APP -->
     <div id="app-screen" class="hidden">
         <div class="sidebar">
             <div class="sidebar-header">
                 <h3 id="my-profile-name">Meu Perfil</h3>
-                <button style="width:auto; padding: 5px;" onclick="alert('Nome: '+usuarioLogado.nome+'\nEmail: '+usuarioLogado.email)">⚙️ Info</button>
+                <button style="width:auto; padding: 5px;" onclick="alert('Nome: '+usuarioLogado.nome+'\nTelefone: '+usuarioLogado.fone)">⚙️ Info</button>
             </div>
             <div class="action-area">
                 <label>Adicionar pelo Número:</label>
@@ -307,13 +384,17 @@
 
         <div class="chat-area">
             <div id="chat-blank-state" class="chat-blank">
-                <span style="font-size: 50px;">🥔</span>
+                <span style="font-size: 50px;">🍟</span>
                 <p>Selecione uma batata para conversar!</p>
             </div>
             <div id="chat-active-state" class="chat-area hidden">
                 <div class="chat-header">
-                    <h3 id="chat-with-name">Nome</h3>
-                    <span id="chat-with-details" style="font-size:12px;"></span>
+                    <div>
+                        <h3 id="chat-with-name">Nome</h3>
+                        <span id="chat-with-details" style="font-size:12px;"></span>
+                    </div>
+                    <!-- Botão de Salvar Contato Dinâmico -->
+                    <button id="btn-salvar-anonimo" class="btn-salvar-contato hidden" onclick="salvarContatoAnonimo()">💾 Salvar Batata</button>
                 </div>
                 <div class="chat-messages" id="messages-container"></div>
                 <div class="chat-input-bar">
@@ -373,7 +454,7 @@
             let db = obterUsuariosBD();
             if(db[fone]) return alert("Esse número já possui conta!");
 
-            db[fone] = { nome, email, senha, fone, contatos: [] };
+            db[fone] = { nome, email, senha, fone, contatos: [], nomesCustomizados: {} };
             salvarUsuariosBD(db);
 
             alert("Conta criada!");
@@ -391,13 +472,13 @@
             let conta = db[fone];
 
             if(conta && conta.email === email && conta.senha === senha) {
+                if(!conta.nomesCustomizados) conta.nomesCustomizados = {};
                 fazerLoginEfetivo(conta);
             } else {
-                alert("Dados incorretos! Verifique o Gmail, Número e Senha.");
+                alert("Dados incorretos! Verifique os dados digitados.");
             }
         }
 
-        // --- SISTEMA DE RECUPERAÇÃO DE SENHA ---
         function enviarCodigoVerificacao() {
             const email = document.getElementById('forgot-email').value.trim();
             const fone = document.getElementById('forgot-phone').value.trim();
@@ -407,26 +488,25 @@
 
             if(conta && conta.email === email) {
                 telefoneRecuperacao = fone;
-                codigoGerado = Math.floor(1000 + Math.random() * 9000); // Gera código de 4 dígitos
+                codigoGerado = Math.floor(1000 + Math.random() * 9000); 
                 
-                // Simulação de envio para o e-mail via Alerta
-                alert(`[SIMULAÇÃO GMAIL]\nPara: ${email}\n\nSeu código de recuperação do BatataZap é: ${codigoGerado}`);
+                alert(`🍟 [CÓDIGO GERADO]\n\nSeu código de recuperação é: ${codigoGerado}`);
                 
                 document.getElementById('step-1').classList.add('hidden');
                 document.getElementById('step-2').classList.remove('hidden');
             } else {
-                alert("Nenhuma conta encontrada com essa combinação de Gmail e Telefone!");
+                alert("Nenhuma conta encontrada com esses dados!");
             }
         }
 
         function verificarCodigo() {
             const codigoDigitado = document.getElementById('verification-code-input').value.trim();
             if(codigoDigitado === String(codigoGerado)) {
-                alert("Código confirmado com sucesso!");
+                alert("Código confirmado!");
                 document.getElementById('step-2').classList.add('hidden');
                 document.getElementById('step-3').classList.remove('hidden');
             } else {
-                alert("Código incorreto! Tente novamente.");
+                alert("Código incorreto!");
             }
         }
 
@@ -438,12 +518,11 @@
             if(db[telefoneRecuperacao]) {
                 db[telefoneRecuperacao].senha = novaSenha;
                 salvarUsuariosBD(db);
-                alert("Senha atualizada com sucesso! Faça login agora.");
+                alert("Senha updated! Faça login.");
                 alternarTela('login');
             }
         }
 
-        // --- SISTEMA DE CHAT ---
         function fazerLoginEfetivo(usuario) {
             usuarioLogado = usuario;
             document.getElementById('register-screen').classList.add('hidden');
@@ -454,8 +533,8 @@
             document.getElementById('my-profile-name').innerText = "🥔 " + usuarioLogado.nome;
             atualizarListaContatos();
             
-            // Loop para atualizar mensagens fixado (sem bugar a digitação do usuário)
             setInterval(renderizarMensagens, 1000);
+            setInterval(atualizarListaContatosPeriodico, 2000); // Mantém a lista lateral atualizada se novos chats entrarem
         }
 
         function adicionarContato() {
@@ -476,26 +555,68 @@
             salvarUsuariosBD(db);
 
             document.getElementById('search-phone').value = "";
-            alert(amigo.nome + " adicionado!");
+            alert("Contato detectado!");
             atualizarListaContatos();
+        }
+
+        // Lógica de proteção e anonimato para exibição de nomes
+        function obterNomeExibicao(foneAlvo, dadosAmigo) {
+            if(!usuarioLogado.contatos) usuarioLogado.contatos = [];
+            
+            // Se o usuário já salvou essa pessoa na lista dele
+            if(usuarioLogado.contatos.includes(foneAlvo)) {
+                if(usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[foneAlvo]) {
+                    return usuarioLogado.nomesCustomizados[foneAlvo];
+                }
+                return dadosAmigo ? dadosAmigo.nome : "Batata Amiga";
+            }
+            // Se não salvou, aparece como Anônimo
+            return "Anônimo (" + foneAlvo + ")";
+        }
+
+        function atualizarListaContatosPeriodico() {
+            // Varre o banco de mensagens para ver se alguém enviou mensagem sem estar na lista de contatos
+            let todasMsgs = obterMensagensBD();
+            let db = obterUsuariosBD();
+            let alterou = false;
+
+            todasMsgs.forEach(m => {
+                if(m.para === usuarioLogado.fone && !usuarioLogado.contatos.includes(m.de)) {
+                    usuarioLogado.contatos.push(m.de);
+                    alterou = true;
+                }
+            });
+
+            if(alterou) {
+                db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
+                salvarUsuariosBD(db);
+                atualizarListaContatos();
+            }
         }
 
         function atualizarListaContatos() {
             const container = document.getElementById('contacts-container');
+            if(!container) return;
+            
+            // Preserva o scroll original
+            const scrollPos = container.scrollTop;
             container.innerHTML = "";
             let db = obterUsuariosBD();
             let meusContatos = usuarioLogado.contatos || [];
 
             meusContatos.forEach(foneNum => {
                 let dadosAmigo = db[foneNum];
-                if(!dadosAmigo) return;
-
+                
                 let item = document.createElement('div');
                 item.className = "contact-item" + (contatoAtivoNum === foneNum ? " active" : "");
                 item.onclick = function() { abrirConversa(foneNum); };
-                item.innerHTML = '<div style="font-weight:bold;">🥔 '+dadosAmigo.nome+'</div><div style="font-size:12px;color:#7f6855">'+dadosAmigo.email+'</div>';
+                
+                let nomeExibicao = obterNomeExibicao(foneNum, dadosAmigo);
+
+                item.innerHTML = '<div style="font-weight:bold;">🥔 '+nomeExibicao+'</div><div style="font-size:12px;color:#7f6855">Tel: '+foneNum+'</div>';
                 container.appendChild(item);
             });
+            container.scrollTop = scrollPos;
         }
 
         function abrirConversa(foneNum) {
@@ -505,11 +626,52 @@
 
             document.getElementById('chat-blank-state').classList.add('hidden');
             document.getElementById('chat-active-state').classList.remove('hidden');
-            document.getElementById('chat-with-name').innerText = amigo.nome;
-            document.getElementById('chat-with-details').innerText = amigo.email + " | Tel: " + amigo.fone;
             
-            totalMensagensAntigas = 0; // Força recarregamento limpo ao trocar de chat
+            let nomeExibicao = obterNomeExibicao(foneNum, amigo);
+            document.getElementById('chat-with-name').innerText = nomeExibicao;
+            document.getElementById('chat-with-details').innerText = "Tel: " + foneNum;
+            
+            // Controla a visibilidade do botão Salvar caso seja Anônimo
+            const btnSalvar = document.getElementById('btn-salvar-anonimo');
+            if(!usuarioLogado.nomesCustomizados || !usuarioLogado.nomesCustomizados[foneNum]) {
+                btnSalvar.classList.remove('hidden');
+            } else {
+                btnSalvar.classList.add('hidden');
+            }
+
+            totalMensagensAntigas = 0; 
             atualizarListaContatos();
+            renderizarMensagens();
+        }
+
+        // Função do botão de salvar com aviso de segurança
+        function salvarContatoAnonimo() {
+            alert("⚠️ ATENÇÃO: Só salve pessoas confiáveis!");
+            
+            let novoNome = prompt("Digite o nome para salvar este Batata-Amigo:");
+            if(!novoNome || !novoNome.trim()) return;
+
+            if(!usuarioLogado.nomesCustomizados) usuarioLogado.nomesCustomizados = {};
+            usuarioLogado.nomesCustomizados[contatoAtivoNum] = novoNome.trim();
+            
+            // Se por algum motivo não estava no array de contatos, adiciona agora
+            if(!usuarioLogado.contatos.includes(contatoAtivoNum)) {
+                usuarioLogado.contatos.push(contatoAtivoNum);
+            }
+
+            let db = obterUsuariosBD();
+            db[usuarioLogado.fone].nomesCustomizados = usuarioLogado.nomesCustomizados;
+            db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
+            salvarUsuariosBD(db);
+
+            alert("Contato salvo com sucesso!");
+            
+            // Atualiza a tela imediatamente
+            document.getElementById('chat-with-name').innerText = novoNome.trim();
+            document.getElementById('btn-salvar-anonimo').classList.add('hidden');
+            atualizarListaContatos();
+            
+            totalMensagensAntigas = 0; 
             renderizarMensagens();
         }
 
@@ -517,13 +679,13 @@
             if(!contatoAtivoNum) return;
             const container = document.getElementById('messages-container');
             let todasMsgs = obterMensagensBD();
+            let db = obterUsuariosBD();
 
             let msgsFiltradas = todasMsgs.filter(m => 
                 (m.de === usuarioLogado.fone && m.para === contatoAtivoNum) ||
                 (m.de === contatoAtivoNum && m.para === usuarioLogado.fone)
             );
 
-            // CORREÇÃO DO BUG: Só mexe no HTML se tiver mensagem nova real, evitando travar a digitação
             if(totalMensagensAntigas === msgsFiltradas.length) return;
             totalMensagensAntigas = msgsFiltradas.length;
 
@@ -531,10 +693,29 @@
             msgsFiltradas.forEach(m => {
                 let div = document.createElement('div');
                 div.className = "msg " + (m.de === usuarioLogado.fone ? "sent" : "received");
-                if(m.tipo === 'texto') {
-                    div.innerText = m.conteudo;
+                
+                let spanFone = document.createElement('span');
+                spanFone.className = "sender-phone";
+                
+                // Exibe o nome customizado se houver ou mantém o número
+                if(m.de === usuarioLogado.fone) {
+                    spanFone.innerText = usuarioLogado.nome + " (" + m.de + ")";
                 } else {
-                    div.innerHTML = '📁 <strong>Arquivo:</strong><br><a class="file-link" href="'+m.conteudo+'" download="'+m.nomeArquivo+'">'+m.nomeArquivo+'</a>';
+                    let nomeIdentificador = usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[m.de] 
+                        ? usuarioLogado.nomesCustomizados[m.de] 
+                        : "Anônimo";
+                    spanFone.innerText = nomeIdentificador + " (" + m.de + ")";
+                }
+                
+                div.appendChild(spanFone);
+
+                if(m.tipo === 'texto') {
+                    let textoNode = document.createTextNode(m.conteudo);
+                    div.appendChild(textoNode);
+                } else {
+                    let fileContainer = document.createElement('span');
+                    fileContainer.innerHTML = '📁 <strong>Arquivo:</strong><br><a class="file-link" href="'+m.conteudo+'" download="'+m.nomeArquivo+'">'+m.nomeArquivo+'</a>';
+                    div.appendChild(fileContainer);
                 }
                 container.appendChild(div);
             });
