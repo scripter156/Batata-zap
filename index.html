@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BatataZap Supremo 🥔 Fries Edition</title>
+    <title>BatataZap v2.0 - Império do Amido 🥔</title>
     <style>
         * {
             margin: 0;
@@ -12,27 +12,54 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* --- SISTEMA DE TEMAS (PADRÃO / DARK MODO CASCA) --- */
+        :root {
+            --bg-gradient-top: #da8f31;
+            --bg-gradient-bottom: #e9e5de;
+            --container-bg: #ffffff;
+            --text-main: #5c3a21;
+            --text-sub: #7f6855;
+            --border-color: #e1d6cd;
+            --chat-bg: #f4ecd8;
+            --msg-sent: #fcdfa2;
+            --msg-received: #ffffff;
+        }
+
+        body.dark-mode {
+            --bg-gradient-top: #2c1a0c;
+            --bg-gradient-bottom: #1a0f07;
+            --container-bg: #3d2511;
+            --text-main: #f5ece1;
+            --text-sub: #d1bda7;
+            --border-color: #52351c;
+            --chat-bg: #26160a;
+            --msg-sent: #be751c;
+            --msg-received: #4a3111;
+        }
+
         body {
-            background-color: #f4f2ee;
-            background-image: linear-gradient(to bottom, #da8f31 127px, #e9e5de 127px);
+            background-color: var(--bg-gradient-bottom);
+            background-image: linear-gradient(to bottom, var(--bg-gradient-top) 127px, var(--bg-gradient-bottom) 127px);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .container {
-            background-color: white;
+            background-color: var(--container-bg);
             width: 400px;
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.3);
             z-index: 5;
+            color: var(--text-main);
         }
 
-        h2 {
-            color: #5c3a21;
+        h2, h3 {
+            color: var(--text-main);
             margin-bottom: 20px;
             text-align: center;
         }
@@ -44,7 +71,7 @@
         label {
             display: block;
             margin-bottom: 5px;
-            color: #7f6855;
+            color: var(--text-sub);
             font-size: 14px;
             font-weight: 600;
         }
@@ -52,10 +79,12 @@
         input, select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e1d6cd;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
             outline: none;
             font-size: 16px;
+            background-color: var(--container-bg);
+            color: var(--text-main);
             transition: 0.2s;
         }
 
@@ -85,7 +114,7 @@
             margin-top: 15px;
             text-align: center;
             font-size: 14px;
-            color: #7f6855;
+            color: var(--text-sub);
         }
 
         .switch-form a {
@@ -100,30 +129,12 @@
         }
 
         .box-batata {
-            background-color: #fff9e6;
+            background-color: rgba(255, 204, 0, 0.1);
             border: 3px dashed #ffcc00;
             border-radius: 15px;
             padding: 20px;
             text-align: center;
-            box-shadow: inset 0 0 10px rgba(255, 204, 0, 0.2);
             margin-top: 15px;
-        }
-
-        .box-batata label {
-            color: #d84b20;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .box-batata input {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 5px;
-            border: 2px solid #ffcc00;
-            background-color: #ffffff;
-            color: #d84b20;
         }
 
         .alert-security {
@@ -143,29 +154,29 @@
             width: 95vw;
             max-width: 1200px;
             height: 90vh;
-            background-color: #fdfbf7;
+            background-color: var(--container-bg);
             display: flex;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
             overflow: hidden;
             z-index: 5;
         }
 
         .sidebar {
             width: 350px;
-            background-color: #ffffff;
-            border-right: 1px solid #e9e5de;
+            background-color: var(--container-bg);
+            border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
         }
 
         .sidebar-header {
-            background-color: #f5ece1;
+            background-color: rgba(0,0,0,0.05);
             padding: 15px;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            border-bottom: 1px solid #e9e5de;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .profile-area {
@@ -175,14 +186,12 @@
             width: 100%;
         }
 
-        /* --- DESIGN DOS STATUS MODO BATATA --- */
         .status-badge {
             display: inline-block;
             width: 14px;
             height: 14px;
             border-radius: 50%;
             border: 2px solid white;
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
         .status-frita { background-color: #ffcc00; animation: pulseGlow 1.5s infinite; }
         .status-pure { background-color: #87ceeb; }
@@ -199,19 +208,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #fff3cd;
+            background-color: rgba(255, 204, 0, 0.2);
             padding: 6px 12px;
             border-radius: 20px;
-            border: 1px solid #ffeeba;
             font-size: 13px;
             font-weight: bold;
-            color: #856404;
+            color: var(--text-main);
         }
 
         .action-area {
             padding: 15px;
-            background-color: #fff9f2;
-            border-bottom: 1px solid #e9e5de;
+            background-color: rgba(0,0,0,0.02);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .action-area input {
@@ -227,27 +235,24 @@
 
         .contact-item {
             padding: 15px;
-            border-bottom: 1px solid #f4f2ee;
+            border-bottom: 1px solid var(--border-color);
             cursor: pointer;
             transition: 0.2s;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            color: var(--text-main);
         }
 
-        .contact-item:hover {
-            background-color: #fff4e6;
-        }
-
-        .contact-item.active {
-            background-color: #ffe8cc;
+        .contact-item:hover, .contact-item.active {
+            background-color: rgba(218, 143, 49, 0.15);
         }
 
         .chat-area {
             flex: 1;
             display: flex;
             flex-direction: column;
-            background-color: #fcf8f2;
+            background-color: var(--container-bg);
         }
 
         .chat-blank {
@@ -255,16 +260,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #a39284;
+            color: var(--text-sub);
             font-size: 18px;
             flex-direction: column;
         }
 
         .chat-header {
-            background-color: #f5ece1;
+            background-color: rgba(0,0,0,0.05);
             padding: 15px 20px;
-            border-bottom: 1px solid #e9e5de;
-            color: #5c3a21;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -274,7 +279,7 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background-color: #f4ecd8;
+            background-color: var(--chat-bg);
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -287,7 +292,6 @@
             width: fit-content;
             word-wrap: break-word;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            position: relative;
         }
 
         .msg .sender-phone {
@@ -299,19 +303,19 @@
         }
 
         .msg.sent {
-            background-color: #fcdfa2;
+            background-color: var(--msg-sent);
             margin-left: auto;
-            color: #4a3111;
-        }
-
-        .msg.sent .sender-phone {
-            color: #a46211;
+            color: var(--text-main);
         }
 
         .msg.received {
-            background-color: white;
+            background-color: var(--msg-received);
             margin-right: auto;
             color: #333;
+        }
+
+        body.dark-mode .msg.received {
+            color: #fdfbf7;
         }
 
         .msg.hot-potato-style {
@@ -319,32 +323,17 @@
             color: white !important;
             animation: shake 0.3s infinite;
         }
-        .msg.hot-potato-style .sender-phone { color: #fff !important; }
 
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
             20% { transform: translate(-3px, 0px) rotate(1deg); }
             30% { transform: translate(0px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(2px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(2px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
-        .file-link {
-            display: block;
-            color: #be751c;
-            font-weight: bold;
-            margin-top: 5px;
-            text-decoration: underline;
-        }
-
         .chat-input-bar {
-            background-color: #f5ece1;
+            background-color: rgba(0,0,0,0.05);
             padding: 15px;
             display: flex;
             gap: 10px;
@@ -356,7 +345,7 @@
         }
 
         .file-label {
-            background-color: #7f6855;
+            background-color: var(--text-sub);
             color: white;
             padding: 10px;
             border-radius: 8px;
@@ -364,48 +353,20 @@
             font-size: 18px;
         }
 
-        .btn-salvar-contato {
-            background-color: #ffcc00;
-            color: #5c3a21;
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 6px;
-            width: auto;
-            margin-bottom: 0;
-        }
-
-        .btn-toggle-potato {
-            background-color: #7f6855;
-            padding: 12px;
-            font-size: 16px;
-            width: auto;
-            margin-bottom: 0;
-        }
-        .btn-toggle-potato.active {
-            background-color: #ff3300;
-            animation: pulseGlow 1s infinite;
-        }
-
-        /* --- LOJINHA POPUP --- */
+        /* --- MODAIS E POPUPS --- */
         .shop-modal {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: var(--container-bg);
+            color: var(--text-main);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             z-index: 10000;
             width: 350px;
-        }
-        .shop-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 10px;
+            border: 2px solid var(--border-color);
         }
 
         /* --- TELA DE LIGAÇÃO TEATRAL --- */
@@ -415,7 +376,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(44, 26, 12, 0.95);
+            background: rgba(26, 15, 7, 0.98);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -424,22 +385,15 @@
             color: white;
             text-align: center;
         }
+
         .call-avatar {
             font-size: 80px;
-            margin-bottom: 20px;
-            animation: ringAnimation 1s infinite alternate;
+            animation: ringAnimation 0.5s infinite alternate;
         }
+
         @keyframes ringAnimation {
             0% { transform: scale(1) rotate(-10deg); }
             100% { transform: scale(1.1) rotate(10deg); }
-        }
-        .btn-hangup {
-            background-color: #ff3300;
-            width: auto;
-            padding: 15px 40px;
-            font-size: 18px;
-            border-radius: 30px;
-            margin-top: 40px;
         }
 
         /* --- ANIMAÇÃO DE LOADING --- */
@@ -460,44 +414,10 @@
             transition: opacity 0.5s ease-in-out;
         }
 
-        #loading-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .super-batata {
-            font-size: 100px;
-            animation: zoomExplosivo 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate;
-            filter: drop-shadow(0 0 30px #ffcc00);
-        }
-
-        .logo-text {
-            color: #fff;
-            font-size: 42px;
-            font-weight: 900;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            font-family: 'Impact', sans-serif;
-            background: linear-gradient(to bottom, #fff 30%, #ffcc00 60%, #ff3300 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-top: 20px;
-            transform: scale(0);
-            animation: entradaTexto 0.8s 0.3s forwards;
-        }
-
-        .particle {
-            position: absolute;
-            font-size: 24px;
-            pointer-events: none;
-            animation: explodirParticula 2.5s linear infinite;
-        }
-
-        @keyframes zoomExplosivo {
-            0% { transform: scale(0.8); }
-            100% { transform: scale(1.15); }
-        }
-        @keyframes entradaTexto { to { transform: scale(1); } }
+        #loading-overlay.active { opacity: 1; pointer-events: auto; }
+        .super-batata { font-size: 100px; animation: zoomExplosivo 1.2s infinite alternate; }
+        @keyframes zoomExplosivo { 0% { transform: scale(0.8); } 100% { transform: scale(1.15); } }
+        .particle { position: absolute; font-size: 24px; pointer-events: none; animation: explodirParticula 2.5s linear infinite; }
         @keyframes explodirParticula {
             0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
             100% { transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(0); opacity: 0; }
@@ -506,39 +426,36 @@
 </head>
 <body>
 
-    <!-- OVERLAY DA ANIMAÇÃO SUPREMA -->
+    <!-- OVERLAY DE ANIMAÇÃO -->
     <div id="loading-overlay">
         <div class="super-batata">🍟</div>
-        <div class="logo-text">BATATA ZAP</div>
+        <div style="color: #fff; font-size: 42px; font-weight: 900;" id="logo-text">BATATA ZAP v2.0</div>
     </div>
 
     <!-- TELA DE LIGAÇÃO TEATRAL -->
     <div id="call-screen" class="call-overlay hidden">
         <div class="call-avatar">🥔📞</div>
-        <h2 id="call-user-name" style="color: white; margin-bottom: 10px;">Batata Amiga</h2>
+        <h2 id="call-user-name" style="color: white; margin-top:20px;">Batata Amiga</h2>
         <p id="call-status-text" style="font-size: 18px; color: #ffcc00;">Discando linha de amido...</p>
-        <button class="btn-hangup" onclick="desligarChamada()">Desligar 🚫</button>
+        <button style="background-color: #ff3300; width:auto; padding:15px 40px; border-radius:30px;" onclick="desligarChamada()">Desligar 🚫</button>
     </div>
 
-    <!-- LOJINHA POPUP -->
+    <!-- 🏪 LOJINHA POPUP & RANKING -->
     <div id="shop-modal" class="shop-modal hidden">
-        <h3 style="color:#da8f31; margin-bottom:15px; text-align:center;">🏪 Fábrica da Batata</h3>
-        <p style="font-size:12px; text-align:center; margin-bottom:15px;">Gaste suas moedas ganhas conversando!</p>
-        <div class="shop-item">
-            <span>🎨 Tema Cheddar</span>
-            <button style="width:auto; padding:5px 10px; font-size:12px;" onclick="comprarItem(50)">50 🪙</button>
+        <h3>🏪 Fábrica da Batata</h3>
+        <button style="background-color:#7f6855; font-size:12px; padding:5px;" onclick="alternarModoCasca()">🎨 Alternar Modo Casca (Dark Mode)</button>
+        
+        <div style="margin-top:15px; border-top:1px solid var(--border-color); padding-top:10px;">
+            <p style="font-weight:bold; font-size:14px; margin-bottom:5px;">🏆 Ranking das Batatas Mais Ricas:</p>
+            <div id="ranking-container" style="font-size:12px; text-align:left; background:rgba(0,0,0,0.05); padding:8px; border-radius:6px;"></div>
         </div>
-        <div class="shop-item">
-            <span>🔥 Emojis Picantes</span>
-            <button style="width:auto; padding:5px 10px; font-size:12px;" onclick="comprarItem(100)">100 🪙</button>
-        </div>
-        <button style="background-color:#7f6855; margin-top:10px;" onclick="fecharLojinha()">Fechar Lojinha</button>
+        <button style="background-color:#da8f31; margin-top:15px;" onclick="fecharLojinha()">Fechar Lojinha</button>
     </div>
 
-    <!-- 1. TELA DE CADASTRO -->
+    <!-- TELA DE CADASTRO -->
     <div id="register-screen" class="container">
         <h2>🥔 BatataZap - Criar Conta</h2>
-        <div class="alert-security">⚠️ ATENÇÃO: Nunca compartilhe seu Gmail e senha com ninguém!</div>
+        <div class="alert-security">⚠️ ATENÇÃO: Nunca compartilhe seus dados com ninguém!</div>
         <div class="form-group"><label>Nome</label><input type="text" id="reg-name" placeholder="Seu nome"></div>
         <div class="form-group"><label>Gmail</label><input type="email" id="reg-email" placeholder="nome@gmail.com"></div>
         <div class="form-group"><label>Senha</label><input type="password" id="reg-password" placeholder="Sua senha"></div>
@@ -547,47 +464,17 @@
         <div class="switch-form">Já tenho uma conta? <a href="#" onclick="alternarTela('login')">Entrar</a></div>
     </div>
 
-    <!-- 2. TELA DE LOGIN -->
+    <!-- TELA DE LOGIN -->
     <div id="login-screen" class="container hidden">
         <h2>🥔 BatataZap - Login</h2>
-        <div class="alert-security">⚠️ SEGURANÇA: Mantenha seus dados de acesso sempre em segredo.</div>
         <div class="form-group"><label>Gmail</label><input type="email" id="login-email" placeholder="nome@gmail.com"></div>
         <div class="form-group"><label>Número de Telefone</label><input type="tel" id="login-phone" placeholder="Ex: 11999999999"></div>
         <div class="form-group"><label>Senha</label><input type="password" id="login-password" placeholder="Sua senha"></div>
         <button onclick="login()">Entrar</button>
-        <div class="switch-form">
-            <a href="#" onclick="alternarTela('forgot')">Esqueci a Senha</a> |
-            <a href="#" onclick="alternarTela('register')">Cadastre-se</a>
-        </div>
+        <div class="switch-form"><a href="#" onclick="alternarTela('register')">Cadastre-se</a></div>
     </div>
 
-    <!-- 3. TELA DE RECUPERAÇÃO DE SENHA -->
-    <div id="forgot-screen" class="container hidden">
-        <h2>🍟 Recuperar Senha</h2>
-        <div class="alert-security">⚠️ Proteja sua conta! Não envie códigos ou senhas para terceiros.</div>
-        
-        <div id="step-1">
-            <div class="form-group"><label>Gmail Cadastrado</label><input type="email" id="forgot-email" placeholder="nome@gmail.com"></div>
-            <div class="form-group"><label>Número de Telefone</label><input type="tel" id="forgot-phone" placeholder="Ex: 11999999999"></div>
-            <button onclick="enviarCodigoVerificacao()">Gerar Código Batata</button>
-        </div>
-        
-        <div id="step-2" class="hidden">
-            <div class="box-batata">
-                <label>🍟 Digite o Batata-Código de 4 dígitos:</label>
-                <input type="text" id="verification-code-input" maxlength="4" placeholder="0000">
-            </div>
-            <button style="margin-top:15px;" onclick="verificarCodigo()">Validar Código</button>
-        </div>
-
-        <div id="step-3" class="hidden">
-            <div class="form-group"><label>Nova Senha</label><input type="password" id="new-password-input" placeholder="Digite a nova senha"></div>
-            <button onclick="atualizarSenha()">Atualizar Senha</button>
-        </div>
-        <div class="switch-form"><a href="#" onclick="alternarTela('login')">Voltar para o Login</a></div>
-    </div>
-
-    <!-- 4. TELA PRINCIPAL APP -->
+    <!-- TELA PRINCIPAL APP -->
     <div id="app-screen" class="hidden">
         <div class="sidebar">
             <div class="sidebar-header">
@@ -600,13 +487,11 @@
                             <option value="assada">🥔 Assada</option>
                             <option value="podre">☠️ Podre</option>
                         </select>
-                        <button style="width:auto; padding: 5px;" onclick="alert('Nome: '+usuarioLogado.nome+'\nTelefone: '+usuarioLogado.fone)">⚙️</button>
                     </div>
                 </div>
-                <!-- Barra de Moedas -->
                 <div class="economy-bar">
                     <span>Saldo: <span id="coin-count">0</span> 🪙</span>
-                    <button style="width:auto; background-color:#da8f31; font-size:11px; padding:3px 8px; margin:0;" onclick="abrirLojinha()">🏪 Lojinha</button>
+                    <button style="width:auto; background-color:#da8f31; font-size:11px; padding:3px 8px; margin:0;" onclick="abrirLojinha()">🏪 Menu Batata</button>
                 </div>
             </div>
             <div class="action-area">
@@ -630,14 +515,14 @@
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
                         <button style="width:auto; padding:6px 12px; background-color:#25d366; font-size:14px; margin:0;" onclick="iniciarLigacao()">📞 Chamar</button>
-                        <button id="btn-salvar-anonimo" class="btn-salvar-contato hidden" onclick="salvarContatoAnonimo()">💾 Salvar Batata</button>
                     </div>
                 </div>
                 <div class="chat-messages" id="messages-container"></div>
                 <div class="chat-input-bar">
-                    <label class="file-label">📁<input type="file" id="file-input" style="display: none;" onchange="enviarArquivo(this)"></label>
-                    <button id="btn-potato-mode" class="btn-toggle-potato" onclick="toggleModoBatataQuente()" title="Modo Batata Quente (Destrói em 5s)">⏱️</button>
-                    <input type="text" id="message-text-input" placeholder="Digite uma mensagem...">
+                    <label class="file-label" title="Enviar Arquivo">📁<input type="file" id="file-input" style="display: none;" onchange="enviarArquivo(this)"></label>
+                    <button id="btn-potato-mode" style="width:auto; margin-bottom:0; background-color:#7f6855;" onclick="toggleModoBatataQuente()" title="Batata Quente (5s)">⏱️</button>
+                    <button id="btn-translator" style="width:auto; margin-bottom:0; background-color:#be751c;" onclick="toggleTranslator()" title="Batata-Tradutor">🥔 Tradutor</button>
+                    <input type="text" id="message-text-input" placeholder="Digite uma mensagem ou /pedir...">
                     <button style="width:auto; padding:12px 20px;" onclick="enviarMensagemTexto()">Enviar</button>
                 </div>
             </div>
@@ -645,68 +530,75 @@
     </div>
 
     <script>
-        function obterUsuariosBD() {
-            try { return JSON.parse(localStorage.getItem('bz_usuarios')) || {}; } 
-            catch(e) { return {}; }
-        }
-        function salvarUsuariosBD(db) {
-            localStorage.setItem('bz_usuarios', JSON.stringify(db));
-        }
-        function obterMensagensBD() {
-            try { return JSON.parse(localStorage.getItem('bz_messages')) || []; } 
-            catch(e) { return []; }
-        }
-        function salvarMensagensBD(msgs) {
-            localStorage.setItem('bz_messages', JSON.stringify(msgs));
-        }
+        function obterUsuariosBD() { try { return JSON.parse(localStorage.getItem('bz_usuarios')) || {}; } catch(e) { return {}; } }
+        function salvarUsuariosBD(db) { localStorage.setItem('bz_usuarios', JSON.stringify(db)); }
+        function obterMensagensBD() { try { return JSON.parse(localStorage.getItem('bz_messages')) || []; } catch(e) { return []; } }
+        function salvarMensagensBD(msgs) { localStorage.setItem('bz_messages', JSON.stringify(msgs)); }
 
         let usuarioLogado = null;
         let contatoAtivoNum = null;
-        let codigoGerado = null;
-        let telefoneRecuperacao = null;
         let totalMensagensAntigas = 0;
         let modoBatataQuenteAtivo = false;
-        let audioContext = null;
+        let tradutorAtivo = false;
+        let audioCtx = null;
         let ringInterval = null;
 
         function dispararAnimacaoEntrada(callbackSucesso) {
             const overlay = document.getElementById('loading-overlay');
             overlay.classList.add('active');
-            for (let i = 0; i < 40; i++) { criarParticulaBatata(); }
+            for (let i = 0; i < 40; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.innerText = ['🍟', '🥔', '💥', '✨'][Math.floor(Math.random() * 4)];
+                p.style.setProperty('--x', `${(Math.random() - 0.5) * window.innerWidth * 0.8}px`);
+                p.style.setProperty('--y', `${(Math.random() - 0.5) * window.innerHeight * 0.8}px`);
+                p.style.left = '50%'; p.style.top = '50%';
+                overlay.appendChild(p);
+            }
             setTimeout(() => {
                 overlay.classList.remove('active');
                 setTimeout(() => { document.querySelectorAll('.particle').forEach(el => el.remove()); }, 500);
                 callbackSucesso();
-            }, 3000);
+            }, 2000);
         }
 
-        function criarParticulaBatata() {
-            const overlay = document.getElementById('loading-overlay');
-            const p = document.createElement('div');
-            p.className = 'particle';
-            const emojis = ['🍟', '🥔', '💥', '✨'];
-            p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            const x = (Math.random() - 0.5) * window.innerWidth * 0.8;
-            const y = (Math.random() - 0.5) * window.innerHeight * 0.8;
-            p.style.setProperty('--x', `${x}px`);
-            p.style.setProperty('--y', `${y}px`);
-            p.style.setProperty('--r', `${Math.random() * 360}deg`);
-            p.style.left = '50%'; p.style.top = '50%';
-            overlay.appendChild(p);
+        /* --- SINTETIZADOR DE ÁUDIO REAL (FRITADEIRA E SONS) --- */
+        function playSom(tipo) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (tipo === 'fritura') { // Som de mensagem enviada (chiado rápido)
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+                } else if (tipo === 'explosao') { // Som de Batata Quente sumindo
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(250, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+                } else if (tipo === 'tuuu') { // Telefone tocando
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.8);
+                }
+            } catch(e){}
         }
 
         function alternarTela(tela) {
             document.getElementById('register-screen').classList.add('hidden');
             document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('forgot-screen').classList.add('hidden');
             if (tela === 'login') document.getElementById('login-screen').classList.remove('hidden');
             if (tela === 'register') document.getElementById('register-screen').classList.remove('hidden');
-            if (tela === 'forgot') {
-                document.getElementById('forgot-screen').classList.remove('hidden');
-                document.getElementById('step-1').classList.remove('hidden');
-                document.getElementById('step-2').classList.add('hidden');
-                document.getElementById('step-3').classList.add('hidden');
-            }
         }
 
         function cadastrar() {
@@ -714,14 +606,11 @@
             const email = document.getElementById('reg-email').value.trim();
             const senha = document.getElementById('reg-password').value;
             const fone = document.getElementById('reg-phone').value.trim();
-
-            if(!nome || !email || !senha || !fone) return alert("Por favor, preencha todos os campos!");
+            if(!nome || !email || !senha || !fone) return alert("Preencha tudo!");
             let db = obterUsuariosBD();
-            if(db[fone]) return alert("Esse número já possui conta!");
-
-            db[fone] = { nome, email, senha, fone, contatos: [], nomesCustomizados: {}, status: 'frita', coins: 0 };
+            if(db[fone]) return alert("Número já cadastrado!");
+            db[fone] = { nome, email, senha, fone, contatos: [], nomesCustomizados: {}, status: 'frita', coins: 10 };
             salvarUsuariosBD(db);
-
             dispararAnimacaoEntrada(() => { fazerLoginEfetivo(db[fone]); });
         }
 
@@ -729,18 +618,11 @@
             const email = document.getElementById('login-email').value.trim();
             const fone = document.getElementById('login-phone').value.trim();
             const senha = document.getElementById('login-password').value;
-
-            if(!email || !fone || !senha) return alert("Preencha todos os campos!");
             let db = obterUsuariosBD();
             let conta = db[fone];
-
             if(conta && conta.email === email && conta.senha === senha) {
-                if(!conta.status) conta.status = 'frita';
-                if(!conta.coins) conta.coins = 0;
                 dispararAnimacaoEntrada(() => { fazerLoginEfetivo(conta); });
-            } else {
-                alert("Dados incorretos!");
-            }
+            } else { alert("Dados incorretos!"); }
         }
 
         function fazerLoginEfetivo(usuario) {
@@ -749,73 +631,31 @@
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app-screen').classList.remove('hidden');
             document.body.style.backgroundImage = "none";
-
             document.getElementById('my-profile-name').innerText = "🥔 " + usuarioLogado.nome;
-            document.getElementById('my-status-select').value = usuarioLogado.status;
             document.getElementById('coin-count').innerText = usuarioLogado.coins;
-
             atualizarListaContatos();
             setInterval(renderizarMensagens, 1000);
-            setInterval(atualizarListaContatosPeriodico, 2000); 
-            setInterval(processarCronometroBatatasQuentes, 1000); // Roda a limpeza a cada segundo
+            setInterval(processarCronometroBatatasQuentes, 1000);
         }
+
+        /* --- SISTEMA DE MARKETING DA LOJINHA & RANKING --- */
+        function abrirLojinha() {
+            document.getElementById('shop-modal').classList.remove('hidden');
+            let db = obterUsuariosBD();
+            let lista = Object.values(db).sort((a,b) => (b.coins || 0) - (a.coins || 0));
+            let html = "";
+            lista.forEach((u, i) => {
+                html += `<div>${i+1}º - 🥔 ${u.nome}: <strong>${u.coins || 0} 🪙</strong></div>`;
+            });
+            document.getElementById('ranking-container').innerHTML = html;
+        }
+        function fecharLojinha() { document.getElementById('shop-modal').classList.add('hidden'); }
+        function alternarModoCasca() { document.body.classList.toggle('dark-mode'); }
 
         function alterarMeuStatus(novoStatus) {
             usuarioLogado.status = novoStatus;
-            let db = obterUsuariosBD();
-            db[usuarioLogado.fone].status = novoStatus;
-            salvarUsuariosBD(db);
+            let db = obterUsuariosBD(); db[usuarioLogado.fone].status = novoStatus; salvarUsuariosBD(db);
             atualizarListaContatos();
-        }
-
-        function abrirLojinha() { document.getElementById('shop-modal').classList.remove('hidden'); }
-        function fecharLojinha() { document.getElementById('shop-modal').classList.add('hidden'); }
-        function comprarItem(preco) {
-            if(usuarioLogado.coins >= preco) {
-                usuarioLogado.coins -= preco;
-                document.getElementById('coin-count').innerText = usuarioLogado.coins;
-                let db = obterUsuariosBD();
-                db[usuarioLogado.fone].coins = usuarioLogado.coins;
-                salvarUsuariosBD(db);
-                alert("🎉 Compra realizada com sucesso na fábrica!");
-            } else {
-                alert("🪙 Batata-Coins insuficientes! Continue conversando para ganhar mais.");
-            }
-        }
-
-        function enviarCodigoVerificacao() {
-            const email = document.getElementById('forgot-email').value.trim();
-            const fone = document.getElementById('forgot-phone').value.trim();
-            let db = obterUsuariosBD();
-            let conta = db[fone];
-
-            if(conta && conta.email === email) {
-                telefoneRecuperacao = fone;
-                codigoGerado = Math.floor(1000 + Math.random() * 9000); 
-                alert(`🍟 [CÓDIGO GERADO]\nSeu código de recuperação é: ${codigoGerado}`);
-                document.getElementById('step-1').classList.add('hidden');
-                document.getElementById('step-2').classList.remove('hidden');
-            } else { alert("Nenhuma conta encontrada!"); }
-        }
-
-        function verificarCodigo() {
-            if(document.getElementById('verification-code-input').value.trim() === String(codigoGerado)) {
-                alert("Confirmado!");
-                document.getElementById('step-2').classList.add('hidden');
-                document.getElementById('step-3').classList.remove('hidden');
-            } else { alert("Código incorreto!"); }
-        }
-
-        function atualizarSenha() {
-            const novaSenha = document.getElementById('new-password-input').value;
-            if(!novaSenha) return;
-            let db = obterUsuariosBD();
-            if(db[telefoneRecuperacao]) {
-                db[telefoneRecuperacao].senha = novaSenha;
-                salvarUsuariosBD(db);
-                alert("Senha alterada!");
-                alternarTela('login');
-            }
         }
 
         function adicionarContato() {
@@ -823,166 +663,72 @@
             if(!numAlvo || numAlvo === usuarioLogado.fone) return;
             let db = obterUsuariosBD();
             if(!db[numAlvo]) return alert("Número não cadastrado!");
-
             if(!usuarioLogado.contatos) usuarioLogado.contatos = [];
-            if(usuarioLogado.contatos.includes(numAlvo)) return alert("Já adicionado!");
-
+            if(usuarioLogado.contatos.includes(numAlvo)) return;
             usuarioLogado.contatos.push(numAlvo);
             db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
             salvarUsuariosBD(db);
-            document.getElementById('search-phone').value = "";
             atualizarListaContatos();
-        }
-
-        function obterNomeExibicao(foneAlvo, dadosAmigo) {
-            if(!usuarioLogado.contatos.includes(foneAlvo)) return "Anônimo (" + foneAlvo + ")";
-            if(usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[foneAlvo]) return usuarioLogado.nomesCustomizados[foneAlvo];
-            return dadosAmigo ? dadosAmigo.nome : "Batata Amiga";
-        }
-
-        function atualizarListaContatosPeriodico() {
-            let todasMsgs = obterMensagensBD();
-            let db = obterUsuariosBD();
-            let alterou = false;
-
-            todasMsgs.forEach(m => {
-                if(m.para === usuarioLogado.fone && !usuarioLogado.contatos.includes(m.de)) {
-                    usuarioLogado.contatos.push(m.de);
-                    alterou = true;
-                }
-            });
-            if(alterou) {
-                db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
-                salvarUsuariosBD(db);
-                atualizarListaContatos();
-            }
         }
 
         function atualizarListaContatos() {
             const container = document.getElementById('contacts-container');
-            if(!container) return;
-            const scrollPos = container.scrollTop;
             container.innerHTML = "";
             let db = obterUsuariosBD();
             let meusContatos = usuarioLogado.contatos || [];
-
             meusContatos.forEach(foneNum => {
                 let dadosAmigo = db[foneNum];
                 let item = document.createElement('div');
                 item.className = "contact-item" + (contatoAtivoNum === foneNum ? " active" : "");
-                item.onclick = function() { abrirConversa(foneNum); };
-                
-                let nomeExibicao = obterNomeExibicao(foneNum, dadosAmigo);
+                item.onclick = function() {
+                    contatoAtivoNum = foneNum;
+                    document.getElementById('chat-blank-state').classList.add('hidden');
+                    document.getElementById('chat-active-state').classList.remove('hidden');
+                    document.getElementById('chat-with-name').innerText = dadosAmigo ? dadosAmigo.nome : foneNum;
+                    totalMensagensAntigas = 0; renderizarMensagens();
+                    atualizarListaContatos();
+                };
                 let amigoStatus = dadosAmigo && dadosAmigo.status ? dadosAmigo.status : 'frita';
-
-                item.innerHTML = `
-                    <div>
-                        <div style="font-weight:bold;">🥔 ${nomeExibicao}</div>
-                        <div style="font-size:12px;color:#7f6855">Tel: ${foneNum}</div>
-                    </div>
-                    <span class="status-badge status-${amigoStatus}"></span>
-                `;
+                item.innerHTML = `<div><strong>🥔 ${dadosAmigo ? dadosAmigo.nome : foneNum}</strong></div><span class="status-badge status-${amigoStatus}"></span>`;
                 container.appendChild(item);
             });
-            container.scrollTop = scrollPos;
         }
 
-        function abrirConversa(foneNum) {
-            contatoAtivoNum = foneNum;
-            let db = obterUsuariosBD();
-            let amigo = db[foneNum];
-
-            document.getElementById('chat-blank-state').classList.add('hidden');
-            document.getElementById('chat-active-state').classList.remove('hidden');
-            document.getElementById('chat-with-name').innerText = obterNomeExibicao(foneNum, amigo);
-            document.getElementById('chat-with-details').innerText = "Tel: " + foneNum;
-            
-            const btnSalvar = document.getElementById('btn-salvar-anonimo');
-            if(!usuarioLogado.nomesCustomizados || !usuarioLogado.nomesCustomizados[foneNum]) btnSalvar.classList.remove('hidden');
-            else btnSalvar.classList.add('hidden');
-
-            // Reseta controle de renderização
-            totalMensagensAntigas = 0; 
-            atualizarListaContatos();
-            renderizarMensagens();
+        /* --- BATATA TRADUTOR --- */
+        function toggleTranslator() {
+            tradutorAtivo = !tradutorAtivo;
+            document.getElementById('btn-translator').style.backgroundColor = tradutorAtivo ? "#ffcc00" : "#be751c";
+        }
+        function codificarBatatinese(texto) {
+            return texto.split('').map(char => char === ' ' ? ' 🍟 ' : 'potato').join(' ');
         }
 
-        function salvarContatoAnonimo() {
-            alert("⚠️ ATENÇÃO: Só salve pessoas confiáveis!");
-            let novoNome = prompt("Nome para este Batata-Amigo:");
-            if(!novoNome || !novoNome.trim()) return;
-
-            if(!usuarioLogado.nomesCustomizados) usuarioLogado.nomesCustomizados = {};
-            usuarioLogado.nomesCustomizados[contatoAtivoNum] = novoNome.trim();
-            if(!usuarioLogado.contatos.includes(contatoAtivoNum)) usuarioLogado.contatos.push(contatoAtivoNum);
-
-            let db = obterUsuariosBD();
-            db[usuarioLogado.fone].nomesCustomizados = usuarioLogado.nomesCustomizados;
-            db[usuarioLogado.fone].contatos = usuarioLogado.contatos;
-            salvarUsuariosBD(db);
-
-            document.getElementById('chat-with-name').innerText = novoNome.trim();
-            document.getElementById('btn-salvar-anonimo').classList.add('hidden');
-            atualizarListaContatos();
-            totalMensagensAntigas = 0; renderizarMensagens();
-        }
-
-        /* --- SISTEMA BATATA QUENTE --- */
+        /* --- BATATA QUENTE CRONOMETRO --- */
         function toggleModoBatataQuente() {
             modoBatataQuenteAtivo = !modoBatataQuenteAtivo;
-            const btn = document.getElementById('btn-potato-mode');
-            if(modoBatataQuenteAtivo) {
-                btn.classList.add('active');
-                btn.innerText = "🔥";
-            } else {
-                btn.classList.remove('active');
-                btn.innerText = "⏱️";
-            }
+            document.getElementById('btn-potato-mode').style.backgroundColor = modoBatataQuenteAtivo ? "#ff3300" : "#7f6855";
         }
 
         function processarCronometroBatatasQuentes() {
             let todasMsgs = obterMensagensBD();
             let agora = Date.now();
             let mudou = false;
-
             let novasMsgs = todasMsgs.filter(m => {
                 if (m.isHotPotato && agora >= m.expireAt) {
-                    mudou = true;
-                    return false; // Remove do BD local
+                    mudou = true; playSom('explosao'); return false;
                 }
                 return true;
             });
-
-            if (mudou) {
-                salvarMensagensBD(novasMsgs);
-                renderizarMensagens();
-            }
+            if (mudou) { salvarMensagensBD(novasMsgs); renderizarMensagens(); }
         }
 
         function renderizarMensagens() {
             if(!contatoAtivoNum) return;
             const container = document.getElementById('messages-container');
             let todasMsgs = obterMensagensBD();
-
-            let msgsFiltradas = todasMsgs.filter(m => 
-                (m.de === usuarioLogado.fone && m.para === contatoAtivoNum) ||
-                (m.de === contatoAtivoNum && m.para === usuarioLogado.fone)
-            );
-
-            if(totalMensagensAntigas === msgsFiltradas.length) {
-                // Atualiza contadores de tempo visualmente sem re-renderizar tudo
-                msgsFiltradas.forEach(m => {
-                    if(m.isHotPotato) {
-                        let el = document.getElementById('timer-' + m.timestamp);
-                        if(el) {
-                            let restante = Math.ceil((m.expireAt - Date.now()) / 1000);
-                            el.innerText = restante > 0 ? " ⏳ " + restante + "s" : " 💥";
-                        }
-                    }
-                });
-                return;
-            }
+            let msgsFiltradas = todasMsgs.filter(m => (m.de === usuarioLogado.fone && m.para === contatoAtivoNum) || (m.de === contatoAtivoNum && m.para === usuarioLogado.fone));
             
+            if(totalMensagensAntigas === msgsFiltradas.length) return;
             totalMensagensAntigas = msgsFiltradas.length;
             container.innerHTML = "";
 
@@ -991,33 +737,15 @@
                 div.className = "msg " + (m.de === usuarioLogado.fone ? "sent" : "received");
                 if (m.isHotPotato) div.classList.add('hot-potato-style');
                 
-                let spanFone = document.createElement('span');
-                spanFone.className = "sender-phone";
-                if(m.de === usuarioLogado.fone) spanFone.innerText = usuarioLogado.nome + " (" + m.de + ")";
-                else {
-                    let nomeIdentificador = usuarioLogado.nomesCustomizados && usuarioLogado.nomesCustomizados[m.de] ? usuarioLogado.nomesCustomizados[m.de] : "Anônimo";
-                    spanFone.innerText = nomeIdentificador + " (" + m.de + ")";
-                }
-                div.appendChild(spanFone);
-
                 let contentSpan = document.createElement('span');
-                if(m.tipo === 'texto') contentSpan.appendChild(document.createTextNode(m.conteudo));
-                else {
-                    contentSpan.innerHTML = '📁 <strong>Arquivo:</strong><br><a class="file-link" href="'+m.conteudo+'" download="'+m.nomeArquivo+'">'+m.nomeArquivo+'</a>';
-                }
+                contentSpan.appendChild(document.createTextNode(m.conteudo));
                 div.appendChild(contentSpan);
 
                 if (m.isHotPotato) {
-                    let timerSpan = document.createElement('span');
-                    timerSpan.id = 'timer-' + m.timestamp;
-                    timerSpan.style.fontSize = '10px';
-                    timerSpan.style.display = 'block';
-                    timerSpan.style.textAlign = 'right';
-                    timerSpan.style.marginTop = '4px';
-                    timerSpan.innerText = " ⏳ 5s";
+                    let timerSpan = document.createElement('div');
+                    timerSpan.style.fontSize = '9px'; timerSpan.innerText = "⏳ Autodestruição ativa";
                     div.appendChild(timerSpan);
                 }
-
                 container.appendChild(div);
             });
             container.scrollTop = container.scrollHeight;
@@ -1025,110 +753,57 @@
 
         function enviarMensagemTexto() {
             const input = document.getElementById('message-text-input');
-            const texto = input.value.trim();
+            let texto = input.value.trim();
             if(!texto || !contatoAtivoNum) return;
 
-            let todasMsgs = obterMensagensBD();
-            let TS = Date.now();
-            
-            let novaMsg = { 
-                de: usuarioLogado.fone, 
-                para: contatoAtivoNum, 
-                tipo: 'texto', 
-                conteudo: texto,
-                timestamp: TS,
-                isHotPotato: modoBatataQuenteAtmini = modoBatataQuenteAtivo,
-                expireAt: modoBatataQuenteAtivo ? TS + 5000 : null
-            };
+            // --- SISTEMA INTERATIVO /PEDIR DELIVERY COM GEOLOCALIZAÇÃO ---
+            if (texto.startsWith('/pedir')) {
+                input.value = "";
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                        let msgDelivery = `🛵 [BATATA DELIVERY] Pedido recebido! Enviando uma porção rústica crocante direto para as coordenadas: Lat ${pos.coords.latitude.toFixed(2)}, Lon ${pos.coords.longitude.toFixed(2)}!`;
+                        salvarMensagemFinal(msgDelivery);
+                    }, () => {
+                        salvarMensagemFinal("🛵 [BATATA DELIVERY] Pedido anotado! Entregando na plantação central mais próxima.");
+                    });
+                }
+                return;
+            }
 
-            todasMsgs.push(novaMsg);
-            salvarMensagensBD(todasMsgs);
-
-            usuarioLogado.coins += 1;
-            document.getElementById('coin-count').innerText = usuarioLogado.coins;
-            let db = obterUsuariosBD();
-            db[usuarioLogado.fone].coins = usuarioLogado.coins;
-            salvarUsuariosBD(db);
-
+            if (tradutorAtivo) { texto = "🍟 " + codificarBatatinese(texto); }
+            salvarMensagemFinal(texto);
             input.value = "";
-            renderizarMensagens();
-            input.focus();
         }
 
-        function enviarArquivo(inputElement) {
-            const arquivo = inputElement.files[0];
-            if(!arquivo || !contatoAtivoNum) return;
-            const leitor = new FileReader();
-            leitor.onload = function(e) {
-                let todasMsgs = obterMensagensBD();
-                let TS = Date.now();
-                todasMsgs.push({ 
-                    de: usuarioLogado.fone, 
-                    para: contatoAtivoNum, 
-                    tipo: 'arquivo', 
-                    conteudo: e.target.result, 
-                    nomeArquivo: arquivo.name,
-                    timestamp: TS,
-                    isHotPotato: modoBatataQuenteAtivo,
-                    expireAt: modoBatataQuenteAtivo ? TS + 5000 : null
-                });
-                salvarMensagensBD(todasMsgs);
-                
-                usuarioLogado.coins += 1;
-                document.getElementById('coin-count').innerText = usuarioLogado.coins;
-                let db = obterUsuariosBD(); db[usuarioLogado.fone].coins = usuarioLogado.coins; salvarUsuariosBD(db);
-
-                renderizarMensagens();
-            };
-            leitor.readAsDataURL(arquivo);
-            inputElement.value = "";
+        function salvarMensagemFinal(texto) {
+            let todasMsgs = obterMensagensBD();
+            let TS = Date.now();
+            todasMsgs.push({
+                de: usuarioLogado.fone, para: contatoAtivoNum, tipo: 'texto', conteudo: texto, timestamp: TS,
+                isHotPotato: modoBatataQuenteAtivo, expireAt: modoBatataQuenteAtivo ? TS + 5000 : null
+            });
+            salvarMensagensBD(todasMsgs);
+            usuarioLogado.coins += 1;
+            document.getElementById('coin-count').innerText = usuarioLogado.coins;
+            let db = obterUsuariosBD(); db[usuarioLogado.fone].coins = usuarioLogado.coins; salvarUsuariosBD(db);
+            playSom('fritura'); renderizarMensagens();
         }
 
         /* --- TELEFONE DE BATATA (LIGAÇÃO TEATRAL) --- */
-        function tocarSomTeatral(frequencia, duracao) {
-            try {
-                if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                let osc = audioContext.createOscillator();
-                let gain = audioContext.createGain();
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-                osc.frequency.value = frequencia;
-                osc.type = 'sine';
-                gain.gain.setValueAtTime(0.1, audioContext.currentTime);
-                osc.start();
-                osc.stop(audioContext.currentTime + duracao);
-            } catch(e){}
-        }
-
         function iniciarLigacao() {
-            let db = obterUsuariosBD();
-            let nomeAmigo = obterNomeExibicao(contatoAtivoNum, db[contatoAtivoNum]);
-            
-            document.getElementById('call-user-name').innerText = nomeAmigo;
             document.getElementById('call-status-text').innerText = "Discando linha de amido...";
             document.getElementById('call-screen').classList.remove('hidden');
+            playSom('tuuu');
+            ringInterval = setInterval(() => { playSom('tuuu'); }, 2500);
 
-            // Simula o som clássico de chamada telefônica (Tuuu... Tuuu...)
-            tocarSomTeatral(350, 0.8);
-            ringInterval = setInterval(() => {
-                tocarSomTeatral(350, 0.8);
-            }, 2500);
-
-            // Resposta teatral automática do bot amigo após 5 segundos
             setTimeout(() => {
                 if(!document.getElementById('call-screen').classList.contains('hidden')) {
                     clearInterval(ringInterval);
-                    document.getElementById('call-status-text').innerHTML = "🟢 CHAMADA ATENDIDA!<br><br><span style='font-size:14px; color:#fff;'>\"Alô? É da pastelaria? Quero duas porções de batata frita rústica e uma coquinha gelada por favor... Alô?\"</span>";
-                    tocarSomTeatral(600, 0.2);
+                    document.getElementById('call-status-text').innerHTML = "🟢 ATENDIDA!<br><br><span style='font-size:14px;'>\"Alô? É da central da batata? Mandem reforços de maionese caseira urgente!\"</span>";
                 }
             }, 5000);
         }
-
-        function desligarChamada() {
-            clearInterval(ringInterval);
-            tocarSomTeatral(150, 0.5); // Som de encerramento
-            document.getElementById('call-screen').classList.add('hidden');
-        }
+        function desligarChamada() { clearInterval(ringInterval); document.getElementById('call-screen').classList.add('hidden'); }
     </script>
 </body>
 </html>
